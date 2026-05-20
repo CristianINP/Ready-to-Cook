@@ -85,11 +85,6 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
     }
   };
 
-  const handleUnitChange = (index, newUnit) => {
-    setUsedIngredients(usedIngredients.map((ing, i) =>
-      i === index ? { ...ing, usedUnit: newUnit } : ing
-    ));
-  };
 
   const handleMarkAsCompleted = () => {
     showModal(

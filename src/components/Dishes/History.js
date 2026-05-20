@@ -22,6 +22,7 @@ const History = ({ setCurrentView, userId }) => {
 
   useEffect(() => {
     loadHistory();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const loadHistory = async () => {

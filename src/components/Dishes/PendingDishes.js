@@ -21,6 +21,7 @@ const PendingDishes = ({ setCurrentView, userId }) => {
 
   useEffect(() => {
     loadDishes();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const loadDishes = async () => {

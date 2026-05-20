@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../services/firebase';
-import { Search, ChefHat, AlertTriangle, Plus } from 'lucide-react';
+import { Search, ChefHat, AlertTriangle } from 'lucide-react';
 import { isPriority, isExpired, getDaysRemaining } from '../../utils/dateCalculations';
 import { generateRecipe } from '../../services/openaiService';
 import { formatQuantity } from '../../utils/recipeHelpers';
@@ -30,6 +30,7 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
 
   useEffect(() => {
     loadData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   const loadData = async () => {
