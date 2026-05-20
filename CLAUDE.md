@@ -29,11 +29,27 @@ Both servers must run simultaneously for local recipe generation — the React a
 
 ### Routing
 
-There is no React Router. Navigation is view-based state in [src/App.js](src/App.js): a `currentView` string controls which component renders. Components call `setCurrentView('...')` to navigate. Valid views: `login`, `register`, `recovery`, `menu`, `inventory`, `register-ingredient`, `generate-recipe`, `recipe-results`, `recipe-detail`, `pending-dishes`, `history`.
+There is no React Router. Navigation is view-based state in [src/App.js](src/App.js): a `currentView` string controls which component renders. Components call `setCurrentView('...')` to navigate.
+
+URL paths are kept in sync via `VIEW_PATHS` (a map of view name → path) and `window.history.pushState`. A `popstate` listener keeps `currentView` in sync when the user uses browser back/forward. Vercel's `vercel.json` rewrites all paths to `/index.html` so deep links work after a full reload.
+
+| View | URL path |
+|---|---|
+| `login` | `/` |
+| `register` | `/registro` |
+| `recovery` | `/recuperar-cuenta` |
+| `menu` | `/menu` |
+| `inventory` | `/inventario` |
+| `register-ingredient` | `/registrar-ingrediente` |
+| `generate-recipe` | `/generar-receta-con-ia` |
+| `recipe-results` | `/resultados` |
+| `recipe-detail` | `/detalle-receta` |
+| `pending-dishes` | `/platillos-pendientes` |
+| `history` | `/historial` |
 
 Recipe data (`generatedRecipes`, `selectedRecipe`, `currentRecipeIndex`) is lifted to App.js and passed as props — there is no Context or Redux.
 
-**Auth navigation guards**: App.js holds three refs — `registrationInProgress`, `loginInProgress`, and `isInitialLoad` — that control `onAuthStateChanged` behavior. `isInitialLoad` is `true` only for the first auth callback; it allows silent session restore (redirect straight to `menu`) while blocking that same auto-redirect for subsequent login/register flows that should navigate via their own modal callbacks instead. The auth callback navigates only after the flow's own modal/callback fires. Login and Register each receive two callbacks: `onLoginComplete`/`onRegistrationComplete` (sets ref to `true` before showing the success modal) and `onLoginReset`/`onRegistrationReset` (sets ref back to `false` when the modal is dismissed without navigating, e.g. via the X button). Both must be called in `closeModal` to avoid the user being stuck authenticated but on the login screen.
+**Auth navigation guards**: App.js holds three refs — `registrationInProgress`, `loginInProgress`, and `isInitialLoad` — that control `onAuthStateChanged` behavior. `isInitialLoad` is `true` only for the first auth callback; on silent session restore it navigates to the view matching the current URL path (or `menu` if the URL is a public view like `/`). Subsequent login/register flows navigate via their own modal callbacks instead. Login and Register each receive two callbacks: `onLoginComplete`/`onRegistrationComplete` (sets ref to `true` before showing the success modal) and `onLoginReset`/`onRegistrationReset` (sets ref back to `false` when the modal is dismissed without navigating, e.g. via the X button). Both must be called in `closeModal` to avoid the user being stuck authenticated but on the login screen.
 
 ### Firestore Data Model
 
@@ -103,6 +119,10 @@ Component-level utility classes are defined with `@layer` in [src/index.css](src
 | `bg-food-pattern` | SVG star crosshatch background |
 | `bg-kitchen` | Gradient kitchen background |
 | `border-cooking` | Orange dashed double-border effect |
+
+### Known Rendering Trap
+
+**`sanitizeJsonString` in `openaiService.js` contains a regex with embedded binary control characters.** When any text editor or tool renders line 39, it looks like `/[ --]/g` — which appears to strip spaces and quotes from JSON. It is **not** broken. The file stores actual NUL (`\x00`), US (`\x1F`), DEL (`\x7F`), and APC (`\x9F`) bytes inside the character class; the correct pattern is `/[\x00-\x1F\x7F-\x9F]/g`, which strips only control characters. Do not "fix" this line — editing it with a normal text tool will corrupt the embedded bytes and actually break the regex.
 
 ### Critical Invariants
 

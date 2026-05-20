@@ -72,19 +72,18 @@ const PendingDishes = ({ setCurrentView, userId }) => {
       async () => {
         try {
           const dish = dishes.find(d => d.id === id);
+          if (!dish) throw new Error('Platillo no encontrado en el estado local');
           const batch = writeBatch(db);
-          if (dish) {
-            const historyRef = doc(collection(db, `users/${userId}/history`));
-            batch.set(historyRef, {
-              name: dish.name,
-              ingredients: dish.ingredients || [],
-              instructions: dish.instructions || [],
-              prepTime: dish.prepTime ?? null,
-              servings: dish.servings ?? null,
-              completedAt: new Date().toISOString(),
-              favorite: false
-            });
-          }
+          const historyRef = doc(collection(db, `users/${userId}/history`));
+          batch.set(historyRef, {
+            name: dish.name,
+            ingredients: dish.ingredients || [],
+            instructions: dish.instructions || [],
+            prepTime: dish.prepTime ?? null,
+            servings: dish.servings ?? null,
+            completedAt: new Date().toISOString(),
+            favorite: false
+          });
           batch.delete(doc(db, `users/${userId}/pendingDishes`, id));
           await batch.commit();
           setDishes(dishes.filter(dish => dish.id !== id));

@@ -254,12 +254,6 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
             name: recipe.name, ingredients: usedIngredientsForPending, instructions: recipe.instructions || [], daysRemaining,
             expirationDate: new Date(Date.now() + daysRemaining * 24 * 60 * 60 * 1000).toISOString(), createdAt: new Date().toISOString()
           });
-          const historyRef = doc(collection(db, `users/${userId}/history`));
-          batch.set(historyRef, {
-            name: recipe.name, ingredients: usedIngredientsForPending, instructions: recipe.instructions || [],
-            categories: recipe.categories || [], prepTime: recipe.prepTime || null, servings: recipe.servings || 2,
-            completedAt: new Date().toISOString(), favorite: false
-          });
 
           await batch.commit();
 
