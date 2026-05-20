@@ -48,6 +48,9 @@ export const formatDate = (dateString) => {
 // Returns "YYYY-MM-DD" in local timezone — safe for <input type="date"> values
 export const toISODateString = (date) => {
   if (!date) return '';
+  // A plain YYYY-MM-DD string has no timezone info — return as-is to avoid
+  // new Date() parsing it as UTC midnight and shifting one day back in UTC-6.
+  if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
   return toLocalDateStr(date);
 };
 
