@@ -53,7 +53,9 @@ Recipe data (`generatedRecipes`, `selectedRecipe`, `currentRecipeIndex`) is lift
 
 ### Firestore Data Model
 
-Each authenticated user has these subcollections under `users/{userId}/`:
+Registration creates a root document at `users/{uid}` with fields `username`, `email`, `birthdate`, `createdAt`. If that write fails, the newly-created Auth user is deleted to avoid orphaned accounts.
+
+Each authenticated user also has these subcollections under `users/{userId}/`:
 
 | Subcollection | Fields | Notes |
 |---|---|---|
@@ -70,11 +72,17 @@ Each authenticated user has these subcollections under `users/{userId}/`:
 
 ### Components
 
+- [src/components/Auth/Login.js](src/components/Auth/Login.js) — Email/password login via Firebase `signInWithEmailAndPassword`. Calls `onLoginComplete` before showing the `welcome` modal; calls `onLoginReset` when the modal is dismissed without navigating (X button).
+- [src/components/Auth/Register.js](src/components/Auth/Register.js) — Creates Firebase Auth user, sets `displayName`, then writes the root `users/{uid}` Firestore doc. Rolls back the Auth user if Firestore write fails. Password rules: ≥8 chars, ≥1 uppercase, ≥1 digit. Uses `registrationCompleted` ref to guard `closeModal` (see Auth navigation guards above).
+- [src/components/Auth/Recovery.js](src/components/Auth/Recovery.js) — Sends password reset email via `sendPasswordResetEmail`. No modal; uses inline success/error state. No auth guard callbacks needed.
+- [src/components/Ingredients/RegisterIngredient.js](src/components/Ingredients/RegisterIngredient.js) — Form to add one ingredient. Calls `getFoodSuggestionsComplete` on name input (≥2 chars) for autocomplete, then `calculateExpirationDateComplete` to compute expiry. Default unit is `Piezas`. When `manualExpiration` is toggled, expiry is stored as `"manual"` type and auto-recalculation is skipped. Dates normalized to 12:00 PM local via `normalizeDateForFirestore`.
 - [src/components/Main/MainMenu.js](src/components/Main/MainMenu.js) — Central dashboard after login. Stateless; receives `setCurrentView` and `onLogout`. Renders five navigation cards: `generate-recipe`, `register-ingredient`, `inventory`, `pending-dishes`, `history`.
 - [src/components/Dishes/History.js](src/components/Dishes/History.js) — Lists all completed recipes from `users/{userId}/history`, sorted newest-first by `completedAt`. Supports expandable accordion cards, favorite toggle (updates Firestore `favorite` field), and delete with confirmation modal.
 - [src/components/Dishes/PendingDishes.js](src/components/Dishes/PendingDishes.js) — Lists saved-for-later recipes from `users/{userId}/pendingDishes`. Allows navigating to `recipe-detail` to cook a pending dish, or deleting it.
 - [src/components/Recipes/RecipeResults.js](src/components/Recipes/RecipeResults.js) — Renders the generated recipe card with carousel navigation (`currentIndex`/`setCurrentIndex`). Handles the "regenerate" flow by calling `generateRecipe()` again with `regenerate: true` and the list of already-used recipe names (tracked in local `usedRecipeNames` state, not App.js). Reads generation params from `sessionStorage.lastRecipeParams` (written by `GenerateRecipe.js`) — if absent, the regenerate button redirects back to `generate-recipe` instead. Navigates to `recipe-detail` by setting `selectedRecipe` in App.js state.
 - [src/components/Ingredients/Inventory.js](src/components/Ingredients/Inventory.js) — Polls Firestore every 60 seconds to refresh expiry status live.
+- [src/components/Recipes/GenerateRecipe.js](src/components/Recipes/GenerateRecipe.js) — Loads non-expired ingredients and pending dishes from Firestore. User selects ingredients/dishes, up to 3 categories, meal time (`Desayuno`/`Comida`/`Cena`/`Merienda`), and servings (1–8). Priority ingredients (≤3 days) are highlighted. On submit, calls `generateRecipe()`, saves params to `sessionStorage.lastRecipeParams`, then navigates to `recipe-results`.
+- [src/components/Recipes/RecipeDetail.js](src/components/Recipes/RecipeDetail.js) — Shows a single recipe. User can toggle whether each ingredient was used and adjust the quantity consumed. Two actions: **Complete** (batch: decrement/delete inventory + write history entry) and **Save as pending** (GPT shelf-life call + batch: write pendingDishes + decrement inventory). `savingAction` state blocks double-submission. Pending dish cleanup (deleting `usedPendingDishIds`) runs outside the batch.
 
 ### Utils
 
@@ -131,6 +139,12 @@ Component-level utility classes are defined with `@layer` in [src/index.css](src
 **Validate `parseSafeQuantity` before arithmetic** — the function returns `{ type: 'number', number: N }` or `{ type: 'text', text: S }`. Always guard `if (parsedQty.type !== 'number' || parsedQty.number <= 0)` and show an error modal before attempting any quantity math. Skipping this guard produces a silent no-op (inventory unchanged but no error shown).
 
 **Register's `closeModal` must not reset the auth guard after successful registration** — `registrationCompleted` ref tracks whether the success modal fired; `closeModal` only calls `onRegistrationReset` when that ref is `false`.
+
+**`closeModal` must always use a functional updater** — write `setModalConfig(prev => ({ ...prev, isOpen: false }))`, never `setModalConfig({ ...modalConfig, isOpen: false })`. The non-functional form captures a stale closure; if `showModal` is called synchronously before `closeModal` fires (both within the same React batch), the spread of the stale value overwrites the newly-opened modal, silently suppressing it.
+
+**Validate inputs before opening a confirm modal, not inside `onConfirm`** — `Modal.js` closes confirm-type modals first (synchronously) and then `await`s `onConfirm`. Any `showModal` call made synchronously inside `onConfirm` before the first `await` races against the auto-close and may be suppressed. Move validation to the caller before `showModal('confirm', ...)` is invoked.
+
+**Guard Firestore date fields against Timestamp objects** — when reading `purchaseDate` or `expirationDate` from a Firestore document snapshot, use `field?.toDate ? field.toDate() : new Date(field)`. Passing a Firestore Timestamp directly to `new Date()` produces `Invalid Date`, which silently writes `"Invalid Date"` strings into Firestore inside a batch commit.
 
 ### Environment Variables
 

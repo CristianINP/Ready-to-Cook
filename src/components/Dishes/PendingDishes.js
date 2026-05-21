@@ -61,18 +61,21 @@ const PendingDishes = ({ setCurrentView, userId }) => {
   };
 
   const closeModal = () => {
-    setModalConfig({ ...modalConfig, isOpen: false });
+    setModalConfig(prev => ({ ...prev, isOpen: false }));
   };
 
   const handleComplete = (id, name) => {
+    const dish = dishes.find(d => d.id === id);
+    if (!dish) {
+      showModal('error', 'Error', 'Platillo no encontrado. Intenta recargar la página.');
+      return;
+    }
     showModal(
       'confirm',
       'Marcar como terminado',
       `¿Deseas marcar "${name}" como terminado?`,
       async () => {
         try {
-          const dish = dishes.find(d => d.id === id);
-          if (!dish) throw new Error('Platillo no encontrado en el estado local');
           const batch = writeBatch(db);
           const historyRef = doc(collection(db, `users/${userId}/history`));
           batch.set(historyRef, {

@@ -79,9 +79,14 @@ const Modal = ({
     if (e.target === e.currentTarget) onClose();
   };
 
-  const handleConfirm = () => {
-    if (onConfirm) onConfirm();
-    onClose();
+  const handleConfirm = async () => {
+    if (type === 'confirm') {
+      onClose();
+      if (onConfirm) await onConfirm();
+    } else {
+      if (onConfirm) await onConfirm();
+      onClose();
+    }
   };
 
   return (

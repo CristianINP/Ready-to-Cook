@@ -123,7 +123,7 @@ const Inventory = ({ setCurrentView, userId }) => {
   };
 
   const closeModal = () => {
-    setModalConfig({ ...modalConfig, isOpen: false });
+    setModalConfig(prev => ({ ...prev, isOpen: false }));
   };
 
   const handleDelete = (id, name) => {
@@ -147,7 +147,7 @@ const Inventory = ({ setCurrentView, userId }) => {
   const startEdit = (ingredient) => {
     setEditingId(ingredient.id);
     setEditForm({
-      quantity: parseFloat(ingredient.quantity).toFixed(2), // Formatear a 2 decimales
+      quantity: parseFloat(ingredient.quantity || 0).toFixed(2),
       unit: ingredient.unit,
       expirationDate: ingredient.expirationDate,
       purchaseDate: ingredient.purchaseDate,
@@ -220,11 +220,16 @@ const Inventory = ({ setCurrentView, userId }) => {
               if (editForm.unit === 'Piezas') {
                 const food = searchFood(editForm.name);
                 if (food) {
-                  const purchaseDate = new Date(editForm.purchaseDate);
-                  const expDate = new Date(purchaseDate);
-                  expDate.setDate(expDate.getDate() + (isFractioned ? food.fraccionado : food.completo));
-                  newExpirationDate = expDate.toISOString();
-                  newExpirationDateType = 'calculada';
+                  const pStr = editForm.purchaseDate
+                    ? (editForm.purchaseDate.length > 10 ? editForm.purchaseDate.split('T')[0] : editForm.purchaseDate)
+                    : '';
+                  if (pStr) {
+                    const [py, pm, pd] = pStr.split('-').map(Number);
+                    const expDate = new Date(py, pm - 1, pd, 12);
+                    expDate.setDate(expDate.getDate() + (isFractioned ? food.fraccionado : food.completo));
+                    newExpirationDate = expDate.toISOString();
+                    newExpirationDateType = 'calculada';
+                  }
                 }
               }
             }
@@ -306,9 +311,8 @@ const Inventory = ({ setCurrentView, userId }) => {
     }
   };
 
-  // Función para formatear cantidad a 2 decimales
   const formatQuantity = (quantity) => {
-    return parseFloat(quantity).toFixed(2);
+    return parseFloat(quantity ?? 0).toFixed(2);
   };
 
   if (loading) {

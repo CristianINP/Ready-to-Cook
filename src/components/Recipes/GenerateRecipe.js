@@ -355,7 +355,7 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
           <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
             <div className="bg-white/60 rounded-xl p-4 border-2 border-food-100 md:col-span-2 lg:col-span-3">
               <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-                <span className="text-lg">🏷️</span> Categorías
+                <span className="text-lg">🏷️</span> Categorías (selección múltiple)
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                 {categories.map(cat => (

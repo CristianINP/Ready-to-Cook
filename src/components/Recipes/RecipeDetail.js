@@ -52,7 +52,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
   };
 
   const closeModal = () => {
-    setModalConfig({ ...modalConfig, isOpen: false });
+    setModalConfig(prev => ({ ...prev, isOpen: false }));
   };
 
   const toggleIngredient = (index) => {
@@ -122,7 +122,9 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
                   const { searchFood } = await import('../../services/foodDatabase');
                   const food = searchFood(currentData.name);
                   if (food?.fraccionado > 0) {
-                    const purchaseDate = new Date(currentData.purchaseDate);
+                    const purchaseDate = currentData.purchaseDate?.toDate
+                      ? currentData.purchaseDate.toDate()
+                      : new Date(currentData.purchaseDate);
                     const newExpDate = new Date(purchaseDate);
                     newExpDate.setDate(newExpDate.getDate() + food.fraccionado);
                     updateData.expirationDate = newExpDate.toISOString();
@@ -224,7 +226,9 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
                   const { searchFood } = await import('../../services/foodDatabase');
                   const food = searchFood(currentData.name);
                   if (food?.fraccionado > 0) {
-                    const purchaseDate = new Date(currentData.purchaseDate);
+                    const purchaseDate = currentData.purchaseDate?.toDate
+                      ? currentData.purchaseDate.toDate()
+                      : new Date(currentData.purchaseDate);
                     const newExpDate = new Date(purchaseDate);
                     newExpDate.setDate(newExpDate.getDate() + food.fraccionado);
                     updateData.expirationDate = newExpDate.toISOString();
@@ -299,6 +303,20 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
       }
     );
   };
+
+  if (!recipe) {
+    return (
+      <div className="min-h-screen bg-food-pattern p-6 flex items-center justify-center">
+        <div className="card-food rounded-2xl p-8 text-center max-w-md">
+          <div className="text-5xl mb-4">🍳</div>
+          <p className="text-gray-600 mb-4">No hay receta seleccionada.</p>
+          <button onClick={() => setCurrentView('menu')} className="btn-food px-6 py-2 rounded-xl">
+            Ir al menú
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-food-pattern p-6 relative overflow-hidden">

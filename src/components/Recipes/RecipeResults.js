@@ -72,11 +72,9 @@ const RecipeResults = ({
         throw new Error('No se generó ninguna receta.');
       }
 
-      const currentTotal = recipes ? recipes.length : 0;
-      const newTargetIndex = currentTotal + newRecipes.length - 1;
-
-      setGeneratedRecipes(prevRecipes => [...prevRecipes, ...newRecipes]);
-      setCurrentIndex(newTargetIndex);
+      const merged = [...(recipes || []), ...newRecipes];
+      setGeneratedRecipes(merged);
+      setCurrentIndex(merged.length - 1);
 
       const newNames = newRecipes.map(r => cleanText(r?.name)).filter(Boolean);
       setUsedRecipeNames(prev => [...prev, ...newNames]);

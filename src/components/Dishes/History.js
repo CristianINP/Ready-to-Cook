@@ -34,9 +34,12 @@ const History = ({ setCurrentView, userId }) => {
       }));
 
       // Ordenar por fecha (más recientes primero)
-      const sorted = recipesData.sort((a, b) =>
-        new Date(b.completedAt) - new Date(a.completedAt)
-      );
+      const toMs = (val) => {
+        if (!val) return 0;
+        const d = val?.toDate ? val.toDate() : new Date(val);
+        return isNaN(d) ? 0 : d.getTime();
+      };
+      const sorted = recipesData.sort((a, b) => toMs(b.completedAt) - toMs(a.completedAt));
 
       setRecipes(sorted);
     } catch (error) {
@@ -58,7 +61,7 @@ const History = ({ setCurrentView, userId }) => {
   };
 
   const closeModal = () => {
-    setModalConfig({ ...modalConfig, isOpen: false });
+    setModalConfig(prev => ({ ...prev, isOpen: false }));
   };
 
   const toggleFavorite = async (id, currentFavorite) => {
