@@ -304,20 +304,6 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
     );
   };
 
-  if (!recipe) {
-    return (
-      <div className="min-h-screen bg-food-pattern p-6 flex items-center justify-center">
-        <div className="card-food rounded-2xl p-8 text-center max-w-md">
-          <div className="text-5xl mb-4">🍳</div>
-          <p className="text-gray-600 mb-4">No hay receta seleccionada.</p>
-          <button onClick={() => setCurrentView('menu')} className="btn-food px-6 py-2 rounded-xl">
-            Ir al menú
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-food-pattern p-6 relative overflow-hidden">
       <div className="absolute top-10 left-10 text-5xl opacity-10 animate-pulse" style={{ animationDelay: '0.5s' }}>🍅</div>

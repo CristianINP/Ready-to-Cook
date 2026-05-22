@@ -66,11 +66,23 @@ function App() {
   // Sincronizar vista con los botones Atrás/Adelante del navegador
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentViewRaw(getViewFromPath(window.location.pathname));
+      const view = getViewFromPath(window.location.pathname);
+      if (!auth.currentUser && !PUBLIC_VIEWS.has(view)) {
+        setCurrentView('login');
+      } else {
+        setCurrentViewRaw(view);
+      }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
+  }, [setCurrentView]);
+
+  // Guard: si el usuario no está autenticado y la vista actual es protegida, redirigir al login
+  useEffect(() => {
+    if (!loading && !user && !PUBLIC_VIEWS.has(currentView)) {
+      setCurrentView('login');
+    }
+  }, [loading, user, currentView, setCurrentView]);
 
   // Verificar si hay un usuario autenticado al cargar la app
   useEffect(() => {
@@ -120,6 +132,10 @@ function App() {
   }
 
   const renderView = () => {
+    if (!user && !PUBLIC_VIEWS.has(currentView)) {
+      return <Login setCurrentView={setCurrentView} />;
+    }
+
     switch (currentView) {
       case 'login':
         return (

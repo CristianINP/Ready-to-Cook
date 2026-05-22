@@ -184,10 +184,10 @@ const RecipeResults = ({
                    <div className="flex items-center justify-center gap-2 text-gray-600">
                      <div className="text-center bg-white rounded-xl px-6 py-3 shadow-md border-2 border-food-100">
                        <p className="text-3xl font-bold text-food-600">
-                         {currentRecipe.servings || 2}
+                         {currentRecipe?.servings || 2}
                        </p>
                        <p className="text-xs text-gray-600 font-medium">
-                         {currentRecipe.servings === 1 ? 'Persona' : 'Personas'}
+                         {currentRecipe?.servings === 1 ? 'Persona' : 'Personas'}
                        </p>
                      </div>
                    </div>

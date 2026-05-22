@@ -1,5 +1,5 @@
 // src/components/Auth/Recovery.js
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../services/firebase';
 import { Mail } from 'lucide-react';
@@ -77,16 +77,18 @@ const Recovery = ({ setCurrentView }) => {
     </div>
   );
 
-  // Generar posiciones aleatorias para los emojis
-  const decorationElements = FOOD_DECORATIONS.slice(0, 15).map((emoji, index) => ({
-    emoji,
-    style: {
-      top: `${Math.random() * 80 + 10}%`,
-      left: `${Math.random() * 80 + 10}%`,
-      animationDelay: `${Math.random() * 3}s`,
-      fontSize: `${Math.random() * 1.5 + 1.5}rem`,
-    }
-  }));
+  const decorationElements = useMemo(() =>
+    FOOD_DECORATIONS.slice(0, 15).map((emoji) => ({
+      emoji,
+      style: {
+        top: `${Math.random() * 80 + 10}%`,
+        left: `${Math.random() * 80 + 10}%`,
+        animationDelay: `${Math.random() * 3}s`,
+        fontSize: `${Math.random() * 1.5 + 1.5}rem`,
+      }
+    }))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  , []);
 
   return (
     <div className="min-h-screen bg-food-pattern flex items-center justify-center p-4 relative overflow-hidden">

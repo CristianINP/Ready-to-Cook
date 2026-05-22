@@ -1,5 +1,5 @@
 // src/components/Auth/Login.js
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../services/firebase';
 import Modal from '../../utils/Modal';
@@ -56,17 +56,19 @@ const Login = ({ setCurrentView, onLoginComplete, onLoginReset }) => {
       
       // Mensajes de error personalizados
       switch (error.code) {
+        case 'auth/invalid-credential':
         case 'auth/user-not-found':
-          setError('No existe una cuenta con este correo');
-          break;
         case 'auth/wrong-password':
-          setError('Contraseña incorrecta');
+          setError('Correo o contraseña incorrectos');
           break;
         case 'auth/invalid-email':
           setError('Correo electrónico inválido');
           break;
         case 'auth/too-many-requests':
           setError('Demasiados intentos fallidos. Intenta más tarde');
+          break;
+        case 'auth/user-disabled':
+          setError('Esta cuenta ha sido deshabilitada');
           break;
         default:
           setError('Error al iniciar sesión. Verifica tus credenciales');
@@ -75,6 +77,19 @@ const Login = ({ setCurrentView, onLoginComplete, onLoginReset }) => {
       setLoading(false);
     }
   };
+
+  const decorationElements = useMemo(() =>
+    FOOD_DECORATIONS.slice(0, 15).map((emoji) => ({
+      emoji,
+      style: {
+        top: `${Math.random() * 80 + 10}%`,
+        left: `${Math.random() * 80 + 10}%`,
+        animationDelay: `${Math.random() * 3}s`,
+        fontSize: `${Math.random() * 1.5 + 1.5}rem`,
+      }
+    }))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  , []);
 
   if (loading) return (
     <div className="min-h-screen bg-food-pattern flex items-center justify-center relative overflow-hidden">
@@ -87,17 +102,6 @@ const Login = ({ setCurrentView, onLoginComplete, onLoginReset }) => {
       </div>
     </div>
   );
-
-  // Generar posiciones aleatorias para los emojis
-  const decorationElements = FOOD_DECORATIONS.slice(0, 15).map((emoji, index) => ({
-    emoji,
-    style: {
-      top: `${Math.random() * 80 + 10}%`,
-      left: `${Math.random() * 80 + 10}%`,
-      animationDelay: `${Math.random() * 3}s`,
-      fontSize: `${Math.random() * 1.5 + 1.5}rem`,
-    }
-  }));
 
   return (
     <div className="min-h-screen bg-food-pattern flex items-center justify-center p-4 relative overflow-hidden">

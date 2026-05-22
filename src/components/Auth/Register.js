@@ -1,5 +1,5 @@
 // src/components/Auth/Register.js
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../../services/firebase';
@@ -143,16 +143,18 @@ const Register = ({ setCurrentView, onRegistrationComplete, onRegistrationReset 
     }
   };
 
-  // Generar posiciones aleatorias para los emojis
-  const decorationElements = FOOD_DECORATIONS.slice(0, 15).map((emoji, index) => ({
-    emoji,
-    style: {
-      top: `${Math.random() * 80 + 10}%`,
-      left: `${Math.random() * 80 + 10}%`,
-      animationDelay: `${Math.random() * 3}s`,
-      fontSize: `${Math.random() * 1.5 + 1.5}rem`,
-    }
-  }));
+  const decorationElements = useMemo(() =>
+    FOOD_DECORATIONS.slice(0, 15).map((emoji) => ({
+      emoji,
+      style: {
+        top: `${Math.random() * 80 + 10}%`,
+        left: `${Math.random() * 80 + 10}%`,
+        animationDelay: `${Math.random() * 3}s`,
+        fontSize: `${Math.random() * 1.5 + 1.5}rem`,
+      }
+    }))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  , []);
 
   if (loading) return (
     <div className="min-h-screen bg-food-pattern flex items-center justify-center relative overflow-hidden">
