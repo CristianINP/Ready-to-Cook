@@ -65,18 +65,6 @@ const Recovery = ({ setCurrentView }) => {
     }
   };
 
-  if (loading) return (
-    <div className="min-h-screen bg-food-pattern flex items-center justify-center relative overflow-hidden">
-      <div className="absolute top-10 left-10 text-4xl opacity-20 animate-pulse">🥕</div>
-      <div className="absolute top-20 right-20 text-3xl opacity-20 animate-pulse" style={{ animationDelay: '0.5s' }}>🍅</div>
-      <div className="absolute bottom-20 left-20 text-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}>🥦</div>
-      <div className="text-center relative z-10">
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-food-200 border-t-food-500 mx-auto mb-4"></div>
-        <p className="text-food-600 font-semibold">Enviando Correo...</p>
-      </div>
-    </div>
-  );
-
   const decorationElements = useMemo(() =>
     FOOD_DECORATIONS.slice(0, 15).map((emoji) => ({
       emoji,
@@ -89,6 +77,18 @@ const Recovery = ({ setCurrentView }) => {
     }))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   , []);
+
+  if (loading) return (
+    <div className="min-h-screen bg-food-pattern flex items-center justify-center relative overflow-hidden">
+      <div className="absolute top-10 left-10 text-4xl opacity-20 animate-pulse">🥕</div>
+      <div className="absolute top-20 right-20 text-3xl opacity-20 animate-pulse" style={{ animationDelay: '0.5s' }}>🍅</div>
+      <div className="absolute bottom-20 left-20 text-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}>🥦</div>
+      <div className="text-center relative z-10">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-food-200 border-t-food-500 mx-auto mb-4"></div>
+        <p className="text-food-600 font-semibold">Enviando Correo...</p>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-food-pattern flex items-center justify-center p-4 relative overflow-hidden">
