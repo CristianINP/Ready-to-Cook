@@ -389,7 +389,7 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
               <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
                 <span className="text-lg">👥</span> Personas
               </label>
-              <input type="number" min="1" max="20" value={servings} onChange={(e) => setServings(parseInt(e.target.value) || 2)} className="w-full px-4 py-3 border-2 border-food-200 rounded-xl focus:ring-2 focus:ring-food-500 focus:border-transparent bg-white transition-all" />
+              <input type="number" min="1" max="20" value={servings} onChange={(e) => setServings(Math.max(1, parseInt(e.target.value) || 2))} className="w-full px-4 py-3 border-2 border-food-200 rounded-xl focus:ring-2 focus:ring-food-500 focus:border-transparent bg-white transition-all" />
             </div>
           </div>
 

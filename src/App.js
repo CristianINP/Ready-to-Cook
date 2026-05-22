@@ -59,7 +59,14 @@ function App() {
   const loginInProgress = useRef(false);
   const isInitialLoad = useRef(true);
 
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [selectedRecipe, setSelectedRecipe] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('selectedRecipe');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [generatedRecipes, setGeneratedRecipes] = useState([]);
   const [currentRecipeIndex, setCurrentRecipeIndex] = useState(0);
 
@@ -104,11 +111,24 @@ function App() {
     return () => unsubscribe();
   }, [setCurrentView]);
 
+  useEffect(() => {
+    try {
+      if (selectedRecipe) {
+        sessionStorage.setItem('selectedRecipe', JSON.stringify(selectedRecipe));
+      } else {
+        sessionStorage.removeItem('selectedRecipe');
+      }
+    } catch {
+      // sessionStorage unavailable
+    }
+  }, [selectedRecipe]);
+
   const handleLogout = async () => {
     try {
       await auth.signOut();
       loginInProgress.current = false;
       registrationInProgress.current = false;
+      setSelectedRecipe(null);
       setCurrentView('login');
       setUser(null);
     } catch (error) {
