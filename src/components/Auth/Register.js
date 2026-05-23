@@ -73,6 +73,16 @@ const Register = ({ setCurrentView, onRegistrationComplete, onRegistrationReset 
       return false;
     }
 
+    // Validar rango de fecha de nacimiento
+    const birth = new Date(formData.birthdate);
+    const today = new Date();
+    const minDate = new Date();
+    minDate.setFullYear(today.getFullYear() - 120);
+    if (birth > today || birth < minDate) {
+      setError('Fecha de nacimiento inválida');
+      return false;
+    }
+
     return true;
   };
 

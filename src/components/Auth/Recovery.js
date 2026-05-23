@@ -173,7 +173,7 @@ const Recovery = ({ setCurrentView }) => {
               <div className="text-6xl mb-4 animate-bounce">✅</div>
               
               <h2 className="text-2xl font-bold text-food-800 mb-3 font-cooking">
-                ¡Correo Enviado! 📧
+                ¡Correo Enviado!
               </h2>
               
               <p className="text-food-600 mb-4">
@@ -198,7 +198,7 @@ const Recovery = ({ setCurrentView }) => {
               {/* Nota informativa */}
               <div className="bg-food-50 border-2 border-food-200 rounded-xl p-3 mb-6">
                 <p className="text-sm text-food-800">
-                  <strong>💡 Nota:</strong> El correo de recuperación se enviará siempre y cuando la dirección de Correo electrónico ingresada se encuentre registrada en nuestro sistema.
+                  <strong>Nota:</strong> El correo de recuperación se enviará siempre y cuando la dirección de Correo electrónico ingresada se encuentre registrada en nuestro sistema.
                 </p>
               </div>
               
