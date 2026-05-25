@@ -99,7 +99,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
         'Cantidad inválida',
         'La cantidad mínima permitida es 0.25. Se ajustará automáticamente.',
         () => {
-          setUsedIngredients(usedIngredients.map((ing, i) =>
+          setUsedIngredients(prev => prev.map((ing, i) =>
             i === index ? { ...ing, usedQuantity: '0.25' } : ing
           ));
         }
@@ -279,7 +279,9 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
           const usedIngredientsForPending = usedIngredients.filter(ing => ing.used).map(ing => ({ name: ing.name, quantity: ing.usedQuantity, unit: ing.usedUnit }));
           const pendingRef = doc(collection(db, `users/${userId}/pendingDishes`));
           batch.set(pendingRef, {
-            name: recipe.name, ingredients: usedIngredientsForPending, instructions: recipe.instructions || [], daysRemaining,
+            name: recipe.name, ingredients: usedIngredientsForPending, instructions: recipe.instructions || [],
+            categories: recipe.categories || [], prepTime: recipe.prepTime || null, servings: recipe.servings || null,
+            daysRemaining,
             expirationDate: new Date(Date.now() + daysRemaining * 24 * 60 * 60 * 1000).toISOString(), createdAt: new Date().toISOString()
           });
 

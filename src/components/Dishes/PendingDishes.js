@@ -82,6 +82,7 @@ const PendingDishes = ({ setCurrentView, userId }) => {
             name: dish.name,
             ingredients: dish.ingredients || [],
             instructions: dish.instructions || [],
+            categories: dish.categories || [],
             prepTime: dish.prepTime ?? null,
             servings: dish.servings ?? null,
             completedAt: new Date().toISOString(),
@@ -89,7 +90,7 @@ const PendingDishes = ({ setCurrentView, userId }) => {
           });
           batch.delete(doc(db, `users/${userId}/pendingDishes`, id));
           await batch.commit();
-          setDishes(dishes.filter(dish => dish.id !== id));
+          setDishes(prev => prev.filter(d => d.id !== id));
           showModal('success', '¡Platillo terminado!', 'Puedes consultar esta receta en tu historial.');
         } catch (error) {
           console.error('Error al eliminar:', error);
@@ -178,6 +179,33 @@ const PendingDishes = ({ setCurrentView, userId }) => {
                         <h3 className="text-xl font-bold text-gray-800 mb-1">
                           {dish.name}
                         </h3>
+
+                        {/* Categorías */}
+                        {dish.categories && dish.categories.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mb-2">
+                            {dish.categories.map((cat, idx) => (
+                              <span key={idx} className="bg-food-100 text-food-700 px-3 py-1 rounded-full text-xs font-bold">
+                                {cat}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Tiempo y Porciones */}
+                        {(dish.prepTime || dish.servings) && (
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            {dish.prepTime && (
+                              <div className="bg-food-50 border border-food-100 rounded-lg px-3 py-1 text-xs text-food-700">
+                                <strong>Tiempo:</strong> {dish.prepTime} min
+                              </div>
+                            )}
+                            {dish.servings && (
+                              <div className="bg-food-50 border border-food-100 rounded-lg px-3 py-1 text-xs text-food-700">
+                                <strong>Porciones:</strong> {dish.servings} personas
+                              </div>
+                            )}
+                          </div>
+                        )}
 
                         {isExpiringSoon && !dish.expired && (
                           <span className="badge-priority text-xs">⚠️ Próximo a caducar</span>

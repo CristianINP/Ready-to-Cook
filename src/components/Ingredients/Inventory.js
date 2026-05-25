@@ -134,7 +134,7 @@ const Inventory = ({ setCurrentView, userId }) => {
       async () => {
         try {
           await deleteDoc(doc(db, `users/${userId}/ingredients`, id));
-          setIngredients(ingredients.filter(ing => ing.id !== id));
+          setIngredients(prev => prev.filter(ing => ing.id !== id));
           showModal('success', '¡Eliminado!', 'Ingrediente eliminado exitosamente');
         } catch (error) {
           console.error('Error al Eliminar:', error);
@@ -248,7 +248,7 @@ const Inventory = ({ setCurrentView, userId }) => {
             isFractioned
           });
 
-          setIngredients(ingredients.map(ing =>
+          setIngredients(prev => prev.map(ing =>
             ing.id === id
               ? {
                 ...ing,
@@ -298,7 +298,7 @@ const Inventory = ({ setCurrentView, userId }) => {
         expirationDateType: 'calculada'
       });
 
-      setIngredients(ingredients.map(ing =>
+      setIngredients(prev => prev.map(ing =>
         ing.id === ingredient.id
           ? { ...ing, expirationDate: newExpirationDate, expirationDateType: 'calculada' }
           : ing

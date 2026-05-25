@@ -200,6 +200,7 @@ const RegisterIngredient = ({ setCurrentView, userId }) => {
                     setShowSuggestions(true);
                   }
                 }}
+                onBlur={() => setShowSuggestions(false)}
                 className="input-food"
                 placeholder="Ej: Manzana, Leche, Queso..."
                 disabled={loading}

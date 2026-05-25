@@ -72,7 +72,7 @@ const History = ({ setCurrentView, userId }) => {
       });
 
       // Actualizar estado local
-      setRecipes(recipes.map(recipe =>
+      setRecipes(prev => prev.map(recipe =>
         recipe.id === id
           ? { ...recipe, favorite: !currentFavorite }
           : recipe
@@ -91,7 +91,7 @@ const History = ({ setCurrentView, userId }) => {
       async () => {
         try {
           await deleteDoc(doc(db, `users/${userId}/history`, id));
-          setRecipes(recipes.filter(recipe => recipe.id !== id));
+          setRecipes(prev => prev.filter(recipe => recipe.id !== id));
           showModal('success', '¡Eliminada!', 'Receta eliminada del historial');
         } catch (error) {
           console.error('Error al eliminar:', error);
