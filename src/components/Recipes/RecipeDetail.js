@@ -7,6 +7,15 @@ import { Check, Clock, BookOpen } from 'lucide-react';
 import Modal from '../../utils/Modal';
 import { formatQuantity, parseSafeQuantity } from '../../utils/recipeHelpers';
 
+const convertToInventoryUnit = (quantity, fromUnit, toUnit) => {
+  if (fromUnit === toUnit) return quantity;
+  if (fromUnit === 'Gramos' && toUnit === 'Kilogramos') return quantity / 1000;
+  if (fromUnit === 'Kilogramos' && toUnit === 'Gramos') return quantity * 1000;
+  if (fromUnit === 'Mililitros' && toUnit === 'Litros') return quantity / 1000;
+  if (fromUnit === 'Litros' && toUnit === 'Mililitros') return quantity * 1000;
+  return quantity;
+};
+
 const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
   const [usedIngredients, setUsedIngredients] = useState(
     recipe?.ingredients?.map(ing => ({
@@ -110,7 +119,8 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
                 return;
               }
               const quantityUsed = Math.round(parsedQty.number * 100) / 100;
-              const newQuantity = Math.round((currentData.quantity - quantityUsed) * 100) / 100;
+              const convertedUsed = convertToInventoryUnit(quantityUsed, ing.usedUnit, currentData.unit);
+              const newQuantity = Math.round((currentData.quantity - convertedUsed) * 100) / 100;
 
               if (newQuantity <= 0) {
                 batch.delete(doc(db, `users/${userId}/ingredients`, ingredientDoc.id));
@@ -215,7 +225,8 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
                 return;
               }
               const quantityUsed = Math.round(parsedQty.number * 100) / 100;
-              const newQuantity = Math.round((currentData.quantity - quantityUsed) * 100) / 100;
+              const convertedUsed = convertToInventoryUnit(quantityUsed, ing.usedUnit, currentData.unit);
+              const newQuantity = Math.round((currentData.quantity - convertedUsed) * 100) / 100;
               if (newQuantity <= 0) {
                 batch.delete(doc(db, `users/${userId}/ingredients`, ingredientDoc.id));
                 usedIngredientsReport.push(`${ing.name}: Inventario Utilizado por Completo (${formatQuantity(currentData.quantity)} ${currentData.unit})`);

@@ -87,6 +87,7 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
     if (selectedCategories.includes(category)) {
       setSelectedCategories(selectedCategories.filter(cat => cat !== category));
     } else {
+      if (selectedCategories.length >= 3) return;
       setSelectedCategories([...selectedCategories, category]);
     }
   };
@@ -130,12 +131,13 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
         unit: ing.unit
       }));
 
+      const effectiveServings = Math.max(1, Math.min(20, parseInt(servings) || 1));
       const params = {
         ingredients: allItems,
         pendingDishes: selectedDishesData,
         categories: selectedCategories,
         mealTime,
-        servings,
+        servings: effectiveServings,
         priorityOnly
       };
 
@@ -355,7 +357,7 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
           <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
             <div className="bg-white/60 rounded-xl p-4 border-2 border-food-100 md:col-span-2 lg:col-span-3">
               <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-                <span className="text-lg">🏷️</span> Categorías (selección múltiple)
+                <span className="text-lg">🏷️</span> Categorías (máx. 3)
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                 {categories.map(cat => (
@@ -389,7 +391,20 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
               <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
                 <span className="text-lg">👥</span> Personas
               </label>
-              <input type="number" min="1" max="20" value={servings} onChange={(e) => setServings(Math.max(1, parseInt(e.target.value) || 2))} className="w-full px-4 py-3 border-2 border-food-200 rounded-xl focus:ring-2 focus:ring-food-500 focus:border-transparent bg-white transition-all" />
+              <input
+                type="number"
+                min="1"
+                max="20"
+                value={servings}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === '') { setServings(''); return; }
+                  const n = parseInt(val, 10);
+                  if (!isNaN(n)) setServings(Math.min(20, Math.max(1, n)));
+                }}
+                onBlur={() => { if (!servings || Number(servings) < 1) setServings(1); }}
+                className="w-full px-4 py-3 border-2 border-food-200 rounded-xl focus:ring-2 focus:ring-food-500 focus:border-transparent bg-white transition-all"
+              />
             </div>
           </div>
 
