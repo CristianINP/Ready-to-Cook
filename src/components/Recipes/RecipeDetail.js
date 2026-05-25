@@ -7,12 +7,23 @@ import { Check, Clock, BookOpen } from 'lucide-react';
 import Modal from '../../utils/Modal';
 import { formatQuantity, parseSafeQuantity } from '../../utils/recipeHelpers';
 
+const normalizeUnit = (unit) => {
+  const u = String(unit || '').toLowerCase().trim();
+  if (['g', 'gr', 'grs', 'gramo', 'gramos'].includes(u)) return 'gramos';
+  if (['kg', 'kilo', 'kilos', 'kilogramo', 'kilogramos'].includes(u)) return 'kilogramos';
+  if (['ml', 'mililitro', 'mililitros'].includes(u)) return 'mililitros';
+  if (['l', 'litro', 'litros'].includes(u)) return 'litros';
+  return u;
+};
+
 const convertToInventoryUnit = (quantity, fromUnit, toUnit) => {
-  if (fromUnit === toUnit) return quantity;
-  if (fromUnit === 'Gramos' && toUnit === 'Kilogramos') return quantity / 1000;
-  if (fromUnit === 'Kilogramos' && toUnit === 'Gramos') return quantity * 1000;
-  if (fromUnit === 'Mililitros' && toUnit === 'Litros') return quantity / 1000;
-  if (fromUnit === 'Litros' && toUnit === 'Mililitros') return quantity * 1000;
+  const from = normalizeUnit(fromUnit);
+  const to = normalizeUnit(toUnit);
+  if (from === to) return quantity;
+  if (from === 'gramos' && to === 'kilogramos') return quantity / 1000;
+  if (from === 'kilogramos' && to === 'gramos') return quantity * 1000;
+  if (from === 'mililitros' && to === 'litros') return quantity / 1000;
+  if (from === 'litros' && to === 'mililitros') return quantity * 1000;
   return quantity;
 };
 
@@ -21,7 +32,9 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
     recipe?.ingredients?.map(ing => ({
       ...ing,
       used: true,
-      usedQuantity: ing.quantity,
+      usedQuantity: typeof ing.quantity === 'number'
+        ? Math.round(ing.quantity * 100) / 100
+        : ing.quantity,
       usedUnit: ing.unit
     })) || []
   );
@@ -65,13 +78,13 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
   };
 
   const toggleIngredient = (index) => {
-    setUsedIngredients(usedIngredients.map((ing, i) =>
+    setUsedIngredients(prev => prev.map((ing, i) =>
       i === index ? { ...ing, used: !ing.used } : ing
     ));
   };
 
   const handleTempChange = (index, value) => {
-    setUsedIngredients(usedIngredients.map((ing, i) =>
+    setUsedIngredients(prev => prev.map((ing, i) =>
       i === index ? { ...ing, usedQuantity: value } : ing
     ));
   };
