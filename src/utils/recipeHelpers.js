@@ -135,6 +135,14 @@ export function normalizeOpenAIResponse(rawResponse) {
     }
   }
 
+  let allergenWarning = null;
+  if (typeof recipe.allergenWarning === 'string') {
+    const cleaned = cleanText(recipe.allergenWarning);
+    if (cleaned) {
+      allergenWarning = cleaned;
+    }
+  }
+
   // Normalizar ingredientes: limpiar cantidades
   let ingredients = [];
   if (Array.isArray(recipe.ingredients)) {
@@ -179,7 +187,8 @@ export function normalizeOpenAIResponse(rawResponse) {
     instructions,
     prepTime,
     servings,
-    portionWarning
+    portionWarning,
+    allergenWarning
   };
 
   return {

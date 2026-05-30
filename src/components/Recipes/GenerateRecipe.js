@@ -204,13 +204,13 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
           onClick={() => setCurrentView('menu')}
           className="mb-6 flex items-center gap-2 text-food-600 font-semibold hover:text-food-700 transition hover:scale-105"
         >
-          ← Volver al Menú
+          ← Volver al menú
         </button>
 
         <div className="card-food rounded-2xl p-8 border-2 border-food-600">
           <div className="flex items-center gap-4 mb-6">
             <span className="text-4xl">🍳</span>
-            <h2 className="text-3xl font-bold text-gray-800 font-cooking">Generar Recetas con IA</h2>
+            <h2 className="text-3xl font-bold text-gray-800 font-cooking">Generar recetas con IA</h2>
           </div>
 
           <div className="mb-6">
@@ -230,7 +230,7 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
             <div className="mb-6">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xl">⚠️</span>
-                <h3 className="text-lg font-bold text-gray-800">Ingredientes Prioritarios</h3>
+                <h3 className="text-lg font-bold text-gray-800">Ingredientes prioritarios</h3>
                 <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full font-medium">Próximos a caducar</span>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -268,7 +268,7 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
           {filteredNormal.length > 0 && (
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <span className="text-xl">🥗</span> Ingredientes Disponibles
+                <span className="text-xl">🥗</span> Ingredientes disponibles
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {filteredNormal.map(ing => (
@@ -305,7 +305,7 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
           {pendingDishes.length > 0 && (
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <span className="text-xl">⏰</span> Platillos Almacenados
+                <span className="text-xl">⏰</span> Platillos almacenados
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {pendingDishes.map(dish => {
@@ -347,9 +347,9 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
           {ingredients.length === 0 && pendingDishes.length === 0 && (
             <div className="text-center py-12 bg-white/60 rounded-2xl mb-6 border-2 border-dashed border-food-200">
               <div className="text-6xl mb-4">🥬</div>
-              <p className="text-gray-600 mb-2 text-lg font-medium">No tienes Ingredientes Disponibles</p>
+              <p className="text-gray-600 mb-2 text-lg font-medium">No tienes ingredientes disponibles</p>
               <button onClick={() => setCurrentView('register-ingredient')} className="btn-food">
-                Registrar Ingredientes
+                Registrar ingredientes
               </button>
             </div>
           )}
@@ -378,7 +378,7 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
 
             <div className="bg-white/60 rounded-xl p-4 border-2 border-food-100">
               <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-                <span className="text-lg">🕐</span> Momento de Alimentación
+                <span className="text-lg">🕐</span> Momento de alimentación
               </label>
               <select value={mealTime} onChange={(e) => setMealTime(e.target.value)} className="w-full px-4 py-3 border-2 border-food-200 rounded-xl focus:ring-2 focus:ring-food-500 focus:border-transparent bg-white transition-all">
                 <option>Desayuno</option>
@@ -427,7 +427,7 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
               className="w-full btn-food text-lg py-4 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ChefHat size={24} />
-              {generating && generatingMode === 'ia' ? 'Generando Recetas...' : 'Generar Recetas con IA'}
+              {generating && generatingMode === 'ia' ? 'Generando recetas...' : 'Generar recetas con IA'}
             </button>
 
             {priorityIngredients.length > 0 && (
@@ -437,7 +437,7 @@ const GenerateRecipe = ({ setCurrentView, userId, setGeneratedRecipes, setCurren
                 className="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white py-3 rounded-xl font-bold hover:from-red-600 hover:to-orange-600 transition flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span><AlertTriangle color="white" /></span>
-                {generating && generatingMode === 'priority' ? 'Generando...' : 'Usar Ingredientes Prioritarios'}
+                {generating && generatingMode === 'priority' ? 'Generando...' : 'Usar ingredientes prioritarios'}
               </button>
             )}
           </div>

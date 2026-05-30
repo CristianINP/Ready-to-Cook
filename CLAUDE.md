@@ -17,6 +17,8 @@ cd Api && npm start   # Express server on http://localhost:3001
 
 Both servers must run simultaneously for local recipe generation — the React app calls `/api/openai`, the CRA dev proxy (`"proxy": "http://localhost:3001"` in `package.json`) forwards it to Express. On Vercel, `/api/openai` is handled by the serverless function `api/openai.js` — no Express needed.
 
+> **Module system**: `Api/index.js` is **ESM** (`"type": "module"` in `Api/package.json`) — use `import`/`export`. `api/openai.js` is **CommonJS** (`module.exports`) — Vercel's Node runtime requires it. Do not mix the two styles.
+
 ## Architecture
 
 **Ready-To-Cook** is a React SPA for food inventory management and AI recipe generation. Firebase handles auth and data; OpenAI GPT-4o-mini generates recipes via a proxy.
@@ -125,6 +127,7 @@ Component-level utility classes are defined with `@layer` in [src/index.css](src
 | `warning-glow` | Red box-shadow glow for near-expiry |
 | `expired-glow` | Darker red glow for expired items |
 | `bg-food-pattern` | SVG star crosshatch background |
+| `bg-leaf-pattern` | SVG leaf/circle pattern (green, low opacity) |
 | `bg-kitchen` | Gradient kitchen background |
 | `border-cooking` | Orange dashed double-border effect |
 
@@ -145,6 +148,10 @@ Component-level utility classes are defined with `@layer` in [src/index.css](src
 **Validate inputs before opening a confirm modal, not inside `onConfirm`** — `Modal.js` closes confirm-type modals first (synchronously) and then `await`s `onConfirm`. Any `showModal` call made synchronously inside `onConfirm` before the first `await` races against the auto-close and may be suppressed. Move validation to the caller before `showModal('confirm', ...)` is invoked.
 
 **Guard Firestore date fields against Timestamp objects** — when reading `purchaseDate` or `expirationDate` from a Firestore document snapshot, use `field?.toDate ? field.toDate() : new Date(field)`. Passing a Firestore Timestamp directly to `new Date()` produces `Invalid Date`, which silently writes `"Invalid Date"` strings into Firestore inside a batch commit.
+
+### Tests
+
+`src/App.test.js` contains a single smoke test (`renders without crashing`). There are no component-level or integration tests. `npm test` runs via CRA's Jest config; use `--testPathPattern=<file>` for a specific file.
 
 ### Environment Variables
 

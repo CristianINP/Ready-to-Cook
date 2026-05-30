@@ -30,7 +30,8 @@ const RecipeResults = ({
   // Formatear warning de porciones de forma segura
   const currentRecipe = recipes && recipes.length > 0 ? recipes[currentIndex] : null;
   const portionWarning = currentRecipe?.portionWarning ? cleanText(currentRecipe.portionWarning) : null;
-  
+  const allergenWarning = currentRecipe?.allergenWarning ? cleanText(currentRecipe.allergenWarning) : null;
+
   // Formatear ingredientes faltantes de forma segura
   const missingIngredients = Array.isArray(currentRecipe?.missingIngredients)
     ? currentRecipe.missingIngredients.filter(ing => ing && ing.name)
@@ -113,7 +114,7 @@ const RecipeResults = ({
         
         <div className="text-center relative z-10 card-food p-8 rounded-2xl">
           <div className="text-6xl mb-4">🍽️</div>
-          <p className="text-gray-600 mb-4 text-lg font-medium">No hay Recetas Generadas</p>
+          <p className="text-gray-600 mb-4 text-lg font-medium">No hay recetas generadas</p>
           <button
             onClick={() => setCurrentView('generate-recipe')}
             className="btn-food"
@@ -152,7 +153,7 @@ const RecipeResults = ({
            <div className="flex w-full max-w-7xl">
              {/* Receta principal - desplazada ligeramente a la izquierda */}
              <div className="flex-shrink-0 w-[70%] pr-6">
-               <div className="card-food rounded-2xl p-8 w-full transform hover:scale-[1.02] transition-all duration-300">
+               <div className="card-food rounded-2xl p-8 w-full border-2 border-food-600 transform hover:scale-[1.02] transition-all duration-300">
                  <div className="mb-6 text-center">
                    <div className="inline-block text-5xl mb-4 animate-bounce">🍳</div>
                    <h3 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6 text-center tracking-tight">
@@ -175,7 +176,7 @@ const RecipeResults = ({
                  
                  <div className="bg-gradient-to-r from-food-50 to-teal-50 rounded-xl p-6 mb-6 border-2 border-food-100">
                    <p className="text-lg text-gray-700 leading-relaxed mb-4">
-                     <strong className="text-food-700">Ingredientes Principales:</strong>{' '}
+                     <strong className="text-food-700">Ingredientes principales:</strong>{' '}
                      {Array.isArray(currentRecipe?.ingredients) && currentRecipe.ingredients.length > 0
                        ? currentRecipe.ingredients.slice(0, 5).map(ing => ing.name).join(', ')
                        : 'No especificados'
@@ -198,19 +199,31 @@ const RecipeResults = ({
                      <div className="flex items-start gap-3">
                        <span className="text-2xl">⚠️</span>
                        <div>
-                         <p className="text-sm font-bold text-orange-800 mb-1">Advertencia de Porciones</p>
+                         <p className="text-sm font-bold text-orange-800 mb-1">Advertencia de porciones</p>
                          <p className="text-sm text-orange-700">{portionWarning}</p>
                        </div>
                      </div>
                    </div>
                  )}
-                 
+
+                 {allergenWarning && (
+                   <div className="bg-red-50 border-2 border-red-400 rounded-xl p-4 mb-6">
+                     <div className="flex items-start gap-3">
+                       <span className="text-2xl">🚨</span>
+                       <div>
+                         <p className="text-sm font-bold text-red-800 mb-1">Advertencia de alérgenos</p>
+                         <p className="text-sm text-red-700">{allergenWarning}</p>
+                       </div>
+                     </div>
+                   </div>
+                 )}
+
                  {missingIngredients.length > 0 && (
                    <div className="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4 mb-4">
                      <div className="flex items-start gap-3">
                        <span className="text-2xl">⚠️</span>
                        <div>
-                         <p className="text-sm font-bold text-yellow-800 mb-2">Ingredientes Faltantes:</p>
+                         <p className="text-sm font-bold text-yellow-800 mb-2">Ingredientes faltantes:</p>
                          <p className="text-sm text-yellow-700">
                            {missingIngredients.map((ing, idx) => {
                                const parsed = parseSafeQuantity(ing.quantity);
@@ -238,7 +251,7 @@ const RecipeResults = ({
                      className="flex-1 btn-food text-lg py-4 flex items-center justify-center gap-2 shadow-xl"
                    >
                      <Heart size={20} />
-                     Ver Receta Completa
+                     Ver receta completa
                    </button>
                    
                    {recipes.length > 1 && (
@@ -263,14 +276,14 @@ const RecipeResults = ({
              
               {/* Panel lateral derecho - módulo de sugerencias */}
               <div className="flex-shrink-0 w-[30%] pl-6">
-                <div className="card-food rounded-2xl p-6 w-full flex flex-col items-center justify-center text-center">
+                <div className="card-food rounded-2xl p-6 w-full border-2 border-food-600 flex flex-col items-center justify-center text-center">
                   <div className="space-y-4">
                     <p className="text-sm font-bold text-gray-800">
                       ¿No te convenció esta receta?
                     </p>
                     <div className="flex flex-col items-center gap-3">
                       <p className="text-xs text-gray-500">
-                        No te preocupes, Genera otra.
+                        No te preocupes, genera otra.
                       </p>
                       <div className="flex gap-2 text-food-400">
                         <span>✦</span>
@@ -292,7 +305,7 @@ const RecipeResults = ({
                         ${generating ? 'animate-spin' : 'group-hover:rotate-180'}
                       `}
                     />
-                    {generating ? 'Generando...' : 'Generar otra Receta'}
+                    {generating ? 'Generando...' : 'Generar otra receta'}
                   </button>
                 </div>
               </div>

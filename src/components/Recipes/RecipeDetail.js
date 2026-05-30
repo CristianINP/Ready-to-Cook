@@ -27,6 +27,16 @@ const convertToInventoryUnit = (quantity, fromUnit, toUnit) => {
   return quantity;
 };
 
+const FEMININE_UNITS = new Set(['piezas', 'pieza']);
+
+const getUsedWord = (rawUnit, quantity) => {
+  const unitNorm = String(rawUnit || '').toLowerCase().trim();
+  const isFeminine = FEMININE_UNITS.has(unitNorm);
+  const isSingular = quantity === 1;
+  if (isFeminine) return isSingular ? 'usada' : 'usadas';
+  return isSingular ? 'usado' : 'usados';
+};
+
 const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
   const [usedIngredients, setUsedIngredients] = useState(
     recipe?.ingredients?.map(ing => ({
@@ -57,7 +67,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
 
         <div className="text-center relative z-10 card-food p-8 rounded-2xl">
           <div className="text-6xl mb-4">🍽️</div>
-          <p className="text-gray-600 mb-4 text-lg font-medium">No hay Receta Seleccionada</p>
+          <p className="text-gray-600 mb-4 text-lg font-medium">No hay receta seleccionada</p>
           <button
             onClick={() => setCurrentView('recipe-results')}
             className="btn-food"
@@ -137,7 +147,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
 
               if (newQuantity <= 0) {
                 batch.delete(doc(db, `users/${userId}/ingredients`, ingredientDoc.id));
-                usedIngredientsReport.push(`${ing.name}: Inventario Utilizado por Completo (${formatQuantity(currentData.quantity)} ${currentData.unit})`);
+                usedIngredientsReport.push(`${ing.name}: Inventario utilizado por completo (${formatQuantity(currentData.quantity)} ${currentData.unit})`);
               } else {
                 const isFractioned = newQuantity < 1;
                 const updateData = { quantity: newQuantity, isFractioned };
@@ -156,7 +166,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
                 batch.update(doc(db, `users/${userId}/ingredients`, ingredientDoc.id), updateData);
                 const singularMap = { Piezas: 'Pieza', Kilogramos: 'Kilogramo', Gramos: 'Gramo', Litros: 'Litro', Mililitros: 'Mililitro' };
                 const displayUnit = quantityUsed === 1 ? (singularMap[ing.usedUnit] || ing.usedUnit) : ing.usedUnit;
-                const usedWord = ing.usedUnit === 'Piezas' ? (quantityUsed === 1 ? 'usada' : 'usadas') : (quantityUsed === 1 ? 'usado' : 'usados');
+                const usedWord = getUsedWord(displayUnit, quantityUsed);
                 usedIngredientsReport.push(`${ing.name}: ${quantityUsed} ${displayUnit} ${usedWord}`);
               }
             }
@@ -242,7 +252,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
               const newQuantity = Math.round((currentData.quantity - convertedUsed) * 100) / 100;
               if (newQuantity <= 0) {
                 batch.delete(doc(db, `users/${userId}/ingredients`, ingredientDoc.id));
-                usedIngredientsReport.push(`${ing.name}: Inventario Utilizado por Completo (${formatQuantity(currentData.quantity)} ${currentData.unit})`);
+                usedIngredientsReport.push(`${ing.name}: Inventario utilizado por completo (${formatQuantity(currentData.quantity)} ${currentData.unit})`);
               } else {
                 const isFractioned = newQuantity < 1;
                 const updateData = { quantity: newQuantity, isFractioned };
@@ -261,7 +271,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
                 batch.update(doc(db, `users/${userId}/ingredients`, ingredientDoc.id), updateData);
                 const singularMap = { Piezas: 'Pieza', Kilogramos: 'Kilogramo', Gramos: 'Gramo', Litros: 'Litro', Mililitros: 'Mililitro' };
                 const displayUnit = quantityUsed === 1 ? (singularMap[ing.usedUnit] || ing.usedUnit) : ing.usedUnit;
-                const usedWord = ing.usedUnit === 'Piezas' ? (quantityUsed === 1 ? 'usada' : 'usadas') : (quantityUsed === 1 ? 'usado' : 'usados');
+                const usedWord = getUsedWord(displayUnit, quantityUsed);
                 usedIngredientsReport.push(`${ing.name}: ${quantityUsed} ${displayUnit} ${usedWord}`);
               }
             }
@@ -282,6 +292,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
             name: recipe.name, ingredients: usedIngredientsForPending, instructions: recipe.instructions || [],
             categories: recipe.categories || [], prepTime: recipe.prepTime || null, servings: recipe.servings || null,
             daysRemaining,
+            allergenWarning: recipe.allergenWarning || null,
             expirationDate: new Date(Date.now() + daysRemaining * 24 * 60 * 60 * 1000).toISOString(), createdAt: new Date().toISOString()
           });
 
@@ -338,10 +349,10 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
 
       <div className="max-w-3xl mx-auto relative z-10">
         <button onClick={() => setCurrentView('recipe-results')} className="mb-6 flex items-center gap-2 text-food-600 font-semibold hover:text-food-700 transition hover:scale-105">
-          ← Volver a Resultados
+          ← Volver a resultados
         </button>
 
-        <div className="card-food rounded-2xl p-8">
+        <div className="card-food rounded-2xl p-8 border-2 border-food-600">
           <div className="text-center mb-6">
             <div className="inline-block text-5xl mb-3 animate-bounce">🍳</div>
             <h2 className="text-3xl font-bold text-gray-800 mb-4 font-cooking">{recipe.name || 'Receta sin nombre'}</h2>
@@ -353,9 +364,21 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
             ))}
           </div>
 
+          {recipe.allergenWarning && (
+            <div className="bg-red-50 border-2 border-red-400 rounded-xl p-4 mb-6">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">🚨</span>
+                <div>
+                  <p className="text-sm font-bold text-red-800 mb-1">Advertencia de alérgenos</p>
+                  <p className="text-sm text-red-700">{recipe.allergenWarning}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="mb-8">
             <h3 className="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
-              <span className="text-2xl">🥗</span> Ingredientes de tu Inventario
+              <span className="text-2xl">🥗</span> Ingredientes de tu inventario
             </h3>
             <p className="text-sm text-gray-500 mb-4">Marca los que usaste y ajusta las cantidades si es necesario</p>
             <div className="space-y-3">
@@ -401,7 +424,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
                       )}
                     </div>
                     <div className="text-right bg-food-50 px-3 py-2 rounded-lg">
-                      <p className="text-xs text-gray-500 font-medium">Receta Sugiere:</p>
+                      <p className="text-xs text-gray-500 font-medium">Receta sugiere:</p>
                       <p className="text-sm text-food-700 font-bold">{formatQuantity(ing.quantity, 2)} {ing.unit || ''}</p>
                     </div>
                   </div>
@@ -415,7 +438,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
           {missingIngredientsSection(recipe.missingIngredients)}
 
           <div className="mb-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><span className="text-2xl">📝</span> Instrucciones de Preparación</h3>
+            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><span className="text-2xl">📝</span> Instrucciones de preparación</h3>
             <div className="bg-white/60 rounded-xl p-4 border-2 border-food-100">
               <ol className="space-y-4">
                 {Array.isArray(recipe.instructions) && recipe.instructions.map((instruction, idx) => (
@@ -428,7 +451,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
           {recipe.prepTime && (
             <div className="bg-gradient-to-r from-food-50 to-teal-50 border-2 border-food-200 rounded-xl p-4 mb-6 flex items-center gap-3">
               <div className="w-12 h-12 bg-food-500 rounded-xl flex items-center justify-center"><Clock className="text-white" size={24} /></div>
-              <div><p className="text-sm text-food-600 font-medium">Tiempo de Preparación</p><p className="text-2xl font-bold text-food-800">{recipe.prepTime} <span className="text-base font-normal">minutos</span></p></div>
+              <div><p className="text-sm text-food-600 font-medium">Tiempo de preparación</p><p className="text-2xl font-bold text-food-800">{recipe.prepTime} <span className="text-base font-normal">minutos</span></p></div>
             </div>
           )}
 
@@ -441,7 +464,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
               {savingAction === 'complete' ? (
                 <><div className="animate-spin rounded-full h-5 w-5 border-2 border-food-600 border-t-transparent"></div>Guardando...</>
               ) : (
-                <><Check size={20} />Marcar como Terminada</>
+                <><Check size={20} />Marcar como terminada</>
               )}
             </button>
             <button
@@ -452,7 +475,7 @@ const RecipeDetail = ({ setCurrentView, recipe, userId }) => {
               {savingAction === 'pending' ? (
                 <><div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>Guardando...</>
               ) : (
-                <><BookOpen size={20} />Guardar como Pendiente</>
+                <><BookOpen size={20} />Guardar como pendiente</>
               )}
             </button>
           </div>
@@ -472,7 +495,7 @@ function missingIngredientsSection(missingIngredients) {
   if (validIngredients.length === 0) return null;
   return (
     <div className="mb-6 bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4">
-      <h3 className="text-lg font-bold text-yellow-800 mb-3 flex items-center gap-2"><span className="text-xl">🛒</span> Ingredientes Adicionales Necesarios</h3>
+      <h3 className="text-lg font-bold text-yellow-800 mb-3 flex items-center gap-2"><span className="text-xl">🛒</span> Ingredientes adicionales necesarios</h3>
       <ul className="space-y-2">
         {validIngredients.map((ing, idx) => {
           const parsed = parseSafeQuantity(ing.quantity);

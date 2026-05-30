@@ -56,7 +56,7 @@ const Register = ({ setCurrentView, onRegistrationComplete, onRegistrationReset 
     // Validar formato de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      setError('Formato de Correo electrónico Inválido');
+      setError('Formato de correo electrónico inválido');
       return false;
     }
 
@@ -137,16 +137,16 @@ const Register = ({ setCurrentView, onRegistrationComplete, onRegistrationReset 
       
       switch (error.code) {
         case 'auth/email-already-in-use':
-          setError('Ya existe una Cuenta con este Correo electrónico');
+          setError('Ya existe una cuenta con este correo electrónico');
           break;
         case 'auth/weak-password':
           setError('La contraseña es muy débil');
           break;
         case 'auth/invalid-email':
-          setError('Correo electrónico Inválido');
+          setError('Correo electrónico inválido');
           break;
         default:
-          setError('Error al Crear la Cuenta. Intente Nuevamente');
+          setError('Error al crear la cuenta. Intente nuevamente');
       }
     } finally {
       setLoading(false);
@@ -173,7 +173,7 @@ const Register = ({ setCurrentView, onRegistrationComplete, onRegistrationReset 
       <div className="absolute bottom-20 left-20 text-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}>🥦</div>
       <div className="text-center relative z-10">
         <div className="animate-spin rounded-full h-16 w-16 border-4 border-food-200 border-t-food-500 mx-auto mb-4"></div>
-        <p className="text-food-600 font-semibold">Creando Cuenta...</p>
+        <p className="text-food-600 font-semibold">Creando cuenta...</p>
       </div>
     </div>
   );
@@ -194,14 +194,14 @@ const Register = ({ setCurrentView, onRegistrationComplete, onRegistrationReset 
       <div className="card-food rounded-2xl p-8 w-full max-w-md relative z-10 border-2 border-food-600">
         <div className="text-center mb-6">
           <div className="text-5xl mb-3 animate-bounce">🍳</div>
-          <h2 className="text-2xl font-bold text-food-800 font-cooking">Crear Cuenta</h2>
+          <h2 className="text-2xl font-bold text-food-800 font-cooking">Crear cuenta</h2>
           <p className="text-food-600 text-sm">¡Únete a la causa contra el desperdicio de alimentos! 🥬</p>
         </div>
         
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
             <label className="block text-sm font-bold text-cream-800 mb-2">
-              Nombre de Usuario
+              Nombre de usuario
             </label>
             <input 
               type="text"
@@ -260,7 +260,7 @@ const Register = ({ setCurrentView, onRegistrationComplete, onRegistrationReset 
           
           <div>
             <label className="block text-sm font-bold text-cream-800 mb-2">
-              Confirmar Contraseña
+              Confirmar contraseña
             </label>
             <div className="relative">
               <input
@@ -286,7 +286,7 @@ const Register = ({ setCurrentView, onRegistrationComplete, onRegistrationReset 
           
           <div>
             <label className="block text-sm font-bold text-cream-800 mb-2">
-              Fecha de Nacimiento
+              Fecha de nacimiento
             </label>
             <input 
               type="date"
@@ -313,7 +313,7 @@ const Register = ({ setCurrentView, onRegistrationComplete, onRegistrationReset 
             {loading ? (
               <>
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-                Creando Cuenta...
+                Creando cuenta...
               </>
             ) : (
               <>
@@ -328,7 +328,7 @@ const Register = ({ setCurrentView, onRegistrationComplete, onRegistrationReset 
             className="w-full text-food-600 py-2 font-bold hover:text-food-700 transition hover:scale-105"
             disabled={loading}
           >
-            ← Volver al Inicio de Sesión
+            ← Volver al inicio de sesión
           </button>
         </form>
       </div>

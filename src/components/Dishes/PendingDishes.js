@@ -131,7 +131,7 @@ const PendingDishes = ({ setCurrentView, userId }) => {
           onClick={() => setCurrentView('menu')}
           className="mb-6 flex items-center gap-2 text-food-600 font-semibold hover:text-food-700 transition hover:scale-105"
         >
-          ← Volver al Menú
+          ← Volver al menú
         </button>
 
         <div className="card-food rounded-2xl p-8 border-2 border-food-600">
@@ -139,7 +139,7 @@ const PendingDishes = ({ setCurrentView, userId }) => {
           <div className="flex items-center gap-4 mb-6">
             <span className="text-4xl">⏰</span>
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 font-cooking">Platillos Almacenados</h2>
+              <h2 className="text-3xl font-bold text-gray-800 font-cooking">Platillos almacenados</h2>
               <p className="text-food-600 text-sm mt-1">Recetas guardadas para terminar después</p>
             </div>
           </div>
@@ -147,13 +147,13 @@ const PendingDishes = ({ setCurrentView, userId }) => {
           {dishes.length === 0 ? (
             <div className="text-center py-12 bg-white/60 rounded-2xl border-2 border-dashed border-food-200">
               <div className="text-6xl mb-4">🍽️</div>
-              <p className="text-gray-600 mb-2 text-lg font-medium">No tienes Platillos Almacenados</p>
+              <p className="text-gray-600 mb-2 text-lg font-medium">No tienes platillos almacenados</p>
               <p className="text-gray-500 text-sm mb-6">Guarda una receta como pendiente para verla aquí</p>
               <button
                 onClick={() => setCurrentView('generate-recipe')}
                 className="btn-food flex items-center justify-center gap-2 mx-auto"
               >
-                <ChefHat size={18} /> Generar una Receta
+                <ChefHat size={18} /> Generar una receta
               </button>
             </div>
           ) : (
@@ -291,7 +291,7 @@ const PendingDishes = ({ setCurrentView, userId }) => {
                         className="flex-1 btn-food py-3 flex items-center justify-center gap-2 font-bold"
                       >
                         <CheckCircle size={20} />
-                        Marcar como Terminado
+                        Marcar como terminado
                       </button>
                     </div>
                   </div>

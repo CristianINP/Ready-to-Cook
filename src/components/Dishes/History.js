@@ -132,7 +132,7 @@ const History = ({ setCurrentView, userId }) => {
           onClick={() => setCurrentView('menu')}
           className="mb-6 flex items-center gap-2 text-food-600 font-semibold hover:text-food-700 transition hover:scale-105"
         >
-          ← Volver al Menú
+          ← Volver al menú
         </button>
 
         <div className="card-food rounded-2xl p-8 border-2 border-food-600">
@@ -140,7 +140,7 @@ const History = ({ setCurrentView, userId }) => {
           <div className="flex items-center gap-4 mb-6">
             <span className="text-4xl">📚</span>
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 font-cooking">Historial de Recetas</h2>
+              <h2 className="text-3xl font-bold text-gray-800 font-cooking">Historial de recetas</h2>
               <p className="text-food-600 text-sm mt-1">Todas las recetas que has preparado</p>
             </div>
           </div>
@@ -154,7 +154,7 @@ const History = ({ setCurrentView, userId }) => {
                 onClick={() => setCurrentView('generate-recipe')}
                 className="btn-food flex items-center justify-center gap-2 mx-auto"
               >
-                <ChefHat size={18} /> Generar una Receta
+                <ChefHat size={18} /> Generar una receta
               </button>
             </div>
           ) : (
@@ -265,7 +265,7 @@ const History = ({ setCurrentView, userId }) => {
                         onClick={() => toggleExpand(recipe.id)}
                       >
                         <BookOpen size={18} />
-                        {isExpanded ? 'Ocultar Detalles' : 'Ver Detalles'}
+                        {isExpanded ? 'Ocultar detalles' : 'Ver detalles'}
                       </button>
                       <button
                         onClick={() => handleDelete(recipe.id, recipe.name)}

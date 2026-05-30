@@ -91,7 +91,7 @@ const RegisterIngredient = ({ setCurrentView, userId }) => {
         if (calculatedDate) {
           finalExpirationDate = toISODateString(calculatedDate);
         } else {
-          setError('No se pudo calcular la Fecha de Caducidad. Por favor Ingrésela Manualmente.');
+          setError('No se pudo calcular la fecha de caducidad. Por favor ingrésela manualmente.');
           setManualExpiration(true);
           setLoading(false);
           return;
@@ -134,9 +134,9 @@ const RegisterIngredient = ({ setCurrentView, userId }) => {
 
       await addDoc(collection(db, `users/${userId}/ingredients`), ingredientData);
 
-      let successMessage = '¡Ingrediente Registrado Exitosamente!';
+      let successMessage = '¡Ingrediente registrado exitosamente!';
       if (foodAddedToPersonalDB) {
-        successMessage += ' (Alimento Agregado a tu Base de Datos Personal)';
+        successMessage += ' (alimento agregado a tu base de datos personal)';
       }
       setSuccess(successMessage);
 
@@ -157,7 +157,7 @@ const RegisterIngredient = ({ setCurrentView, userId }) => {
 
     } catch (error) {
       console.error('Error al Registrar Ingrediente:', error);
-      setError('Error al Registrar el Ingrediente. Intente nuevamente.');
+      setError('Error al registrar el ingrediente. Intente nuevamente.');
     } finally {
       setLoading(false);
     }
@@ -176,20 +176,20 @@ const RegisterIngredient = ({ setCurrentView, userId }) => {
           onClick={() => setCurrentView('menu')}
           className="mb-6 flex items-center gap-2 text-food-600 font-semibold hover:text-food-700 transition hover:scale-105"
         >
-          ← Volver al Menú
+          ← Volver al menú
         </button>
 
         <div className="card-food rounded-2xl p-8 border-2 border-food-600">
           <div className="flex items-center gap-4 mb-6">
             <span className="text-4xl animate-bounce">🥬</span>
-            <h2 className="text-3xl font-bold text-gray-800 font-cooking">Registrar Ingrediente</h2>
+            <h2 className="text-3xl font-bold text-gray-800 font-cooking">Registrar ingrediente</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Nombre del ingrediente con autocompletado */}
             <div className="relative">
               <label className="block text-sm font-bold text-cream-800 mb-2">
-                🍽️ Nombre del Ingrediente *
+                🍽️ Nombre del ingrediente *
               </label>
               <input
                 type="text"
@@ -270,7 +270,7 @@ const RegisterIngredient = ({ setCurrentView, userId }) => {
             {/* Fecha de compra */}
             <div>
               <label className="block text-sm font-bold text-cream-800 mb-2">
-                🛒 Fecha de Compra *
+                🛒 Fecha de compra *
               </label>
               <input
                 type="date"
@@ -286,14 +286,14 @@ const RegisterIngredient = ({ setCurrentView, userId }) => {
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-bold text-cream-800">
-                  📅 Fecha de Caducidad (opcional)
+                  📅 Fecha de caducidad (opcional)
                 </label>
                 <button
                   type="button"
                   onClick={() => setManualExpiration(!manualExpiration)}
                   className="text-xs text-food-600 hover:text-food-700 font-semibold transition hover:scale-105"
                 >
-                  {manualExpiration ? '⚡ Calcular Automáticamente' : '✏️ Ingresar Manualmente'}
+                  {manualExpiration ? '⚡ Calcular automáticamente' : '✏️ Ingresar manualmente'}
                 </button>
               </div>
 
@@ -310,8 +310,8 @@ const RegisterIngredient = ({ setCurrentView, userId }) => {
 
               <p className="text-xs text-cream-600 mt-2 flex items-center gap-1">
                 💡 {manualExpiration
-                  ? 'Ingrese la Fecha de Caducidad Manualmente'
-                  : 'Si no la ingresa, El sistema la calculará automáticamente'
+                  ? 'Ingrese la fecha de caducidad manualmente'
+                  : 'Si no la ingresa, el sistema la calculará automáticamente'
                 }
               </p>
             </div>
@@ -344,7 +344,7 @@ const RegisterIngredient = ({ setCurrentView, userId }) => {
                 </>
               ) : (
                 <>
-                  <Plus size={20} /> Registrar Ingrediente
+                  <Plus size={20} /> Registrar ingrediente
                 </>
               )}
             </button>

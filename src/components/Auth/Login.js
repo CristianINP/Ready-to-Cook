@@ -98,7 +98,7 @@ const Login = ({ setCurrentView, onLoginComplete, onLoginReset }) => {
       <div className="absolute bottom-20 left-20 text-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}>🥦</div>
       <div className="text-center relative z-10">
         <div className="animate-spin rounded-full h-16 w-16 border-4 border-food-200 border-t-food-500 mx-auto mb-4"></div>
-        <p className="text-food-600 font-semibold">Iniciando Sesión...</p>
+        <p className="text-food-600 font-semibold">Iniciando sesión...</p>
       </div>
     </div>
   );
@@ -120,7 +120,7 @@ const Login = ({ setCurrentView, onLoginComplete, onLoginReset }) => {
         <div className="text-center mb-8">
           <div className="text-6xl mb-4 animate-bounce">🥗</div>
           <h1 className="text-3xl font-bold text-food-800 font-cooking">Ready to Cook</h1>
-          <p className="text-food-600 mt-2">Gestiona tus alimentos, Evita el desperdicio 🥬</p>
+          <p className="text-food-600 mt-2">Gestiona tus alimentos, evita el desperdicio 🥬</p>
         </div>
         
         <form onSubmit={handleLogin} className="space-y-4">
@@ -178,11 +178,11 @@ const Login = ({ setCurrentView, onLoginComplete, onLoginReset }) => {
             {loading ? (
               <>
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-                Iniciando Sesión...
+                Iniciando sesión...
               </>
             ) : (
               <>
-                <LogIn size={20} /> Iniciar Sesión
+                <LogIn size={20} /> Iniciar sesión
               </>
             )}
           </button>
@@ -193,12 +193,12 @@ const Login = ({ setCurrentView, onLoginComplete, onLoginReset }) => {
               onClick={() => setCurrentView('recovery')}
               className="text-food-600 hover:text-food-700 font-semibold transition hover:scale-105 inline-block"
             >
-              ¿Olvidaste tu Contraseña?
+              ¿Olvidaste tu contraseña?
             </button>
           </div>
           
           <div className="text-center text-sm text-cream-700">
-            ¿No tienes Cuenta? - {' '}
+            ¿No tienes cuenta? - {' '}
             <button 
               type="button"
               onClick={() => setCurrentView('register')}

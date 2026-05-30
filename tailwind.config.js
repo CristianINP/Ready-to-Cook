@@ -69,7 +69,8 @@ module.exports = {
       animation: {
         'bounce-food': 'bounceFood 2s ease-in-out infinite',
         'pulse-fresh': 'pulseFresh 3s ease-in-out infinite',
-        'wiggle': 'wiggle 1s ease-in-out infinite',
+        'wiggle': 'wiggle 0.55s ease-in-out infinite alternate',
+        'card-float': 'cardFloat 1.2s ease-in-out infinite',
       },
       keyframes: {
         bounceFood: {
@@ -81,8 +82,12 @@ module.exports = {
           '50%': { opacity: '0.7' },
         },
         wiggle: {
-          '0%, 100%': { transform: 'rotate(-3deg)' },
-          '50%': { transform: 'rotate(3deg)' },
+          '0%':   { transform: 'rotate(-3deg)' },
+          '100%': { transform: 'rotate(3deg)' },
+        },
+        cardFloat: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%':      { transform: 'translateY(-8px)' },
         },
       },
     },

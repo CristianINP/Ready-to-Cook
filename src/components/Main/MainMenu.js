@@ -19,7 +19,7 @@ const MainMenu = ({ setCurrentView, onLogout }) => {
             className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 text-food-700 font-medium border-2 border-transparent hover:border-food-300"
           >
             <LogOut size={18} />
-            Cerrar Sesión
+            Cerrar sesión
           </button>
         </div>
 
@@ -30,76 +30,74 @@ const MainMenu = ({ setCurrentView, onLogout }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Generar Recetas con IA — featured button, full width */}
+          {/* Generar recetas con IA — tarjeta destacada, ancho completo */}
           <button
             onClick={() => setCurrentView('generate-recipe')}
-            className="md:col-span-2 bg-gradient-to-br from-food-50 via-cream-50 to-food-100 border-2 border-food-600 hover:border-food-800 rounded-2xl shadow-lg hover:shadow-2xl p-10 hover:scale-[1.03] transition-all duration-300 group relative overflow-hidden">
-            {/* Efecto de hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
+            className="md:col-span-2 bg-gradient-to-br from-food-50 via-cream-50 to-food-100 hover:from-food-200 hover:via-food-100 hover:to-food-200 border-2 border-food-600 hover:border-food-700 rounded-2xl shadow-lg hover:shadow-[0_30px_60px_rgba(237,117,29,0.22)] p-10 hover:animate-card-float transition-all duration-300 group relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"></div>
 
-            <div className="bg-food-200 w-24 h-24 rounded-full flex items-center justify-center mb-4 group-hover:bg-food-300 transition-all duration-300 group-hover:scale-110 mx-auto relative">
+            <div className="bg-food-200 w-24 h-24 rounded-full flex items-center justify-center mb-4 group-hover:bg-food-300 transition-all duration-300 group-hover:scale-[1.15] mx-auto relative">
               <span className="text-5xl">🍳</span>
             </div>
             <div className="flex items-center justify-center mb-2">
-              <h3 className="text-2xl font-bold text-gray-800 text-center">Generar Recetas con IA</h3>
+              <h3 className="text-2xl font-bold text-gray-800 text-center">Generar recetas con IA</h3>
             </div>
             <p className="text-food-600 text-center text-base">Crea recetas con tus ingredientes</p>
             <div className="absolute -bottom-2 -right-2 text-3xl opacity-40">🍳</div>
           </button>
 
+          {/* Registrar ingredientes — círculo food-100 */}
           <button
             onClick={() => setCurrentView('register-ingredient')}
-            className="card-food p-8 hover:scale-[1.03] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden border-2 border-food-600 hover:border-food-800">
-            {/* Efecto de hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
+            className="card-food p-8 hover:bg-fresh-100 hover:animate-card-float hover:shadow-[0_20px_50px_rgba(34,197,94,0.15)] transition-all duration-300 group relative overflow-hidden border-2 border-food-600 hover:border-fresh-600">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"></div>
 
-            <div className="bg-food-100 w-20 h-20 rounded-full flex items-center justify-center mb-4 group-hover:bg-food-200 transition-all duration-300 group-hover:scale-110 mx-auto relative">
+            <div className="bg-fresh-100 w-20 h-20 rounded-full flex items-center justify-center mb-4 group-hover:bg-fresh-200 transition-all duration-300 group-hover:scale-[1.15] mx-auto relative">
               <span className="text-4xl">🥬</span>
             </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2 text-center">Registrar Ingredientes</h3>
+            <h3 className="text-xl font-bold text-gray-800 mb-2 text-center">Registrar ingredientes</h3>
             <p className="text-gray-600 text-center">Añade nuevos alimentos a tu despensa</p>
             <div className="absolute -bottom-2 -right-2 text-2xl opacity-50">🥕</div>
           </button>
 
+          {/* Gestionar inventario — círculo fresh-100 */}
           <button
             onClick={() => setCurrentView('inventory')}
-            className="card-food p-8 hover:scale-[1.03] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden border-2 border-food-600 hover:border-food-800">
-            {/* Efecto de hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
+            className="card-food p-8 hover:bg-fresh-100 hover:animate-card-float hover:shadow-[0_20px_50px_rgba(34,197,94,0.15)] transition-all duration-300 group relative overflow-hidden border-2 border-food-600 hover:border-fresh-600">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"></div>
 
-            <div className="bg-fresh-100 w-20 h-20 rounded-full flex items-center justify-center mb-4 group-hover:bg-fresh-200 transition-all duration-300 group-hover:scale-110 mx-auto relative">
+            <div className="bg-fresh-100 w-20 h-20 rounded-full flex items-center justify-center mb-4 group-hover:bg-fresh-200 transition-all duration-300 group-hover:scale-[1.15] mx-auto relative">
               <span className="text-4xl">📦</span>
             </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2 text-center">Gestionar Inventario</h3>
-            <p className="text-gray-600 text-center">Consulta y Organiza tus ingredientes</p>
+            <h3 className="text-xl font-bold text-gray-800 mb-2 text-center">Gestionar inventario</h3>
+            <p className="text-gray-600 text-center">Consulta y organiza tus ingredientes</p>
             <div className="absolute -bottom-2 -right-2 text-2xl opacity-50">🥬</div>
           </button>
 
+          {/* Platillos almacenados — círculo fresh-100 */}
           <button
             onClick={() => setCurrentView('pending-dishes')}
-            className="card-food p-8 hover:scale-[1.03] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden border-2 border-food-600 hover:border-food-800">
-            {/* Efecto de hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
+            className="card-food p-8 hover:bg-fresh-100 hover:animate-card-float hover:shadow-[0_20px_50px_rgba(34,197,94,0.15)] transition-all duration-300 group relative overflow-hidden border-2 border-food-600 hover:border-fresh-600">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"></div>
 
-            <div className="bg-fresh-100 w-20 h-20 rounded-full flex items-center justify-center mb-4 group-hover:bg-fresh-200 transition-all duration-300 group-hover:scale-110 mx-auto relative">
+            <div className="bg-fresh-100 w-20 h-20 rounded-full flex items-center justify-center mb-4 group-hover:bg-fresh-200 transition-all duration-300 group-hover:scale-[1.15] mx-auto relative">
               <span className="text-4xl">⌛</span>
             </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2 text-center">Platillos Almacenados</h3>
+            <h3 className="text-xl font-bold text-gray-800 mb-2 text-center">Platillos almacenados</h3>
             <p className="text-gray-600 text-center">Revisa tus recetas sin terminar</p>
             <div className="absolute -bottom-2 -right-2 text-2xl opacity-50">⏰</div>
           </button>
 
-
+          {/* Historial de recetas — círculo fresh-100 */}
           <button
             onClick={() => setCurrentView('history')}
-            className="card-food p-8 hover:scale-[1.03] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden border-2 border-food-600 hover:border-food-800">
-            {/* Efecto de hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"></div>
+            className="card-food p-8 hover:bg-fresh-100 hover:animate-card-float hover:shadow-[0_20px_50px_rgba(34,197,94,0.15)] transition-all duration-300 group relative overflow-hidden border-2 border-food-600 hover:border-fresh-600">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"></div>
 
-            <div className="bg-fresh-100 w-20 h-20 rounded-full flex items-center justify-center mb-4 group-hover:bg-fresh-200 transition-all duration-300 group-hover:scale-110 mx-auto relative">
+            <div className="bg-fresh-100 w-20 h-20 rounded-full flex items-center justify-center mb-4 group-hover:bg-fresh-200 transition-all duration-300 group-hover:scale-[1.15] mx-auto relative">
               <span className="text-4xl">📚</span>
             </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-2 text-center">Historial de Recetas</h3>
+            <h3 className="text-xl font-bold text-gray-800 mb-2 text-center">Historial de recetas</h3>
             <p className="text-gray-600 text-center">Consulta todas tus recetas preparadas</p>
             <div className="absolute -bottom-2 -right-2 text-2xl opacity-50">🗂️</div>
           </button>

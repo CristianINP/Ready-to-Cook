@@ -26,7 +26,7 @@ const Recovery = ({ setCurrentView }) => {
 
     // Validar campo vacío
     if (!email) {
-      setError('Por favor ingrese su Correo electrónico');
+      setError('Por favor ingrese su correo electrónico');
       setLoading(false);
       return;
     }
@@ -34,7 +34,7 @@ const Recovery = ({ setCurrentView }) => {
     // Validar formato de email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setError('Formato de Correo electrónico Inválido');
+      setError('Formato de correo electrónico inválido');
       setLoading(false);
       return;
     }
@@ -49,16 +49,16 @@ const Recovery = ({ setCurrentView }) => {
       
       switch (error.code) {
         case 'auth/user-not-found':
-          setError('No existe una Cuenta asociada a este Correo electrónico');
+          setError('No existe una cuenta asociada a este correo electrónico');
           break;
         case 'auth/invalid-email':
-          setError('Correo electrónico Inválido');
+          setError('Correo electrónico inválido');
           break;
         case 'auth/too-many-requests':
-          setError('Demasiados Intentos. Intente más tarde');
+          setError('Demasiados intentos. Intente más tarde');
           break;
         default:
-          setError('Error al enviar el Correo. Intente nuevamente');
+          setError('Error al enviar el correo. Intente nuevamente');
       }
     } finally {
       setLoading(false);
@@ -85,7 +85,7 @@ const Recovery = ({ setCurrentView }) => {
       <div className="absolute bottom-20 left-20 text-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}>🥦</div>
       <div className="text-center relative z-10">
         <div className="animate-spin rounded-full h-16 w-16 border-4 border-food-200 border-t-food-500 mx-auto mb-4"></div>
-        <p className="text-food-600 font-semibold">Enviando Correo...</p>
+        <p className="text-food-600 font-semibold">Enviando correo...</p>
       </div>
     </div>
   );
@@ -110,7 +110,7 @@ const Recovery = ({ setCurrentView }) => {
             {/* Header */}
             <div className="text-center mb-6">
               <div className="text-5xl mb-3 animate-bounce">🔐</div>
-              <h2 className="text-2xl font-bold text-food-800 font-cooking mb-2">Recuperar Contraseña</h2>
+              <h2 className="text-2xl font-bold text-food-800 font-cooking mb-2">Recuperar contraseña</h2>
               <p className="text-sm text-food-600">
                 Te enviaremos un enlace para restablecer tu contraseña 🥬
               </p>
@@ -151,7 +151,7 @@ const Recovery = ({ setCurrentView }) => {
                 ) : (
                   <>
                    <Mail size={20} />
-                  Enviar Enlace de Recuperación
+                  Enviar enlace de recuperación
                   </>
                 )}
               </button>
@@ -162,7 +162,7 @@ const Recovery = ({ setCurrentView }) => {
                 className="w-full text-food-600 py-2 font-bold hover:text-food-700 transition hover:scale-105"
                 disabled={loading}
               >
-                ← Volver al Inicio de Sesión
+                ← Volver al inicio de sesión
               </button>
             </form>
           </>
@@ -173,7 +173,7 @@ const Recovery = ({ setCurrentView }) => {
               <div className="text-6xl mb-4 animate-bounce">✅</div>
               
               <h2 className="text-2xl font-bold text-food-800 mb-3 font-cooking">
-                ¡Correo Enviado!
+                ¡Correo enviado!
               </h2>
               
               <p className="text-food-600 mb-4">
@@ -206,7 +206,7 @@ const Recovery = ({ setCurrentView }) => {
                 onClick={() => setCurrentView('login')}
                 className="w-full bg-gradient-to-r from-food-500 to-food-600 text-white py-3 rounded-xl font-bold hover:from-food-600 hover:to-food-700 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
               >
-                ← Volver al Inicio de Sesión
+                ← Volver al inicio de sesión
               </button>
             </div>
           </>

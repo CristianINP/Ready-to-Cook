@@ -325,7 +325,7 @@ const Inventory = ({ setCurrentView, userId }) => {
         
         <div className="text-center relative z-10">
           <div className="animate-spin rounded-full h-16 w-16 border-4 border-food-200 border-t-food-500 mx-auto mb-4"></div>
-          <p className="text-food-600 font-semibold">Cargando Inventario...</p>
+          <p className="text-food-600 font-semibold">Cargando inventario...</p>
         </div>
       </div>
     );
@@ -343,24 +343,24 @@ const Inventory = ({ setCurrentView, userId }) => {
           onClick={() => setCurrentView('menu')}
           className="mb-6 flex items-center gap-2 text-food-600 font-semibold hover:text-food-700 transition hover:scale-105"
         >
-          ← Volver al Menú
+          ← Volver al menú
         </button>
 
         <div className="card-food rounded-2xl p-8 border-2 border-food-600">
           <div className="flex items-center gap-4 mb-6">
             <span className="text-4xl">📦</span>
-            <h2 className="text-3xl font-bold text-gray-800 font-cooking">Mi Despensa</h2>
+            <h2 className="text-3xl font-bold text-gray-800 font-cooking">Mi despensa</h2>
           </div>
 
           {ingredients.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-6xl mb-4 animate-bounce">🥬</div>
-              <p className="text-gray-600 mb-4 text-lg">No tienes Ingredientes Registrados</p>
+              <p className="text-gray-600 mb-4 text-lg">No tienes ingredientes registrados</p>
               <button
                 onClick={() => setCurrentView('register-ingredient')}
                 className="btn-food"
               >
-                🥗 Registrar Primer Ingrediente
+                🥗 Registrar primer ingrediente
               </button>
             </div>
           ) : (
