@@ -87,7 +87,7 @@ export const foodDatabase = [
   { name: "Puré de papas cocido", completo: 4, fraccionado: 4, category: "preparadas" }
 ];
 
-// Función para normalizar texto (quitar acentos, minúsculas, espacios extra)
+// ALG2 - BÚSQUEDA Y AUTOCOMPLETADO DE INGREDIENTES
 const normalizeText = (text) => {
   return text
     .toLowerCase()
@@ -224,7 +224,7 @@ export const getFoodSuggestionsComplete = async (searchTerm, userId) => {
       .map(doc => doc.data().name)
       .filter(name => normalizeText(name).includes(normalizedSearch));
 
-    // Combinar y eliminar duplicados
+    // ALG3 - ELIMINACIÓN DE DUPLICADOS
     const combined = [...new Set([...globalSuggestions, ...personalSuggestions])];
     return combined.slice(0, 5);
   } catch (error) {
@@ -233,7 +233,7 @@ export const getFoodSuggestionsComplete = async (searchTerm, userId) => {
   }
 };
 
-// Calcular fecha de caducidad buscando en AMBAS bases
+// ALG4 - CÁLCULO DE FECHA DE CADUCIDAD
 export const calculateExpirationDateComplete = async (purchaseDate, foodName, quantity, userId) => {
   const food = await searchFoodComplete(foodName, userId);
 

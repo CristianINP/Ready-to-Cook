@@ -13,6 +13,7 @@ const toLocalMidnight = (value) => {
   return new Date(y, m - 1, d);
 };
 
+// ALG5 - ALERTAS DE PRIORIDAD
 export const isPriority = (expirationDate) => {
   if (!expirationDate) return false;
   const today = toLocalMidnight(new Date());

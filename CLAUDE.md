@@ -49,7 +49,7 @@ URL paths are kept in sync via `VIEW_PATHS` (a map of view name → path) and `w
 | `pending-dishes` | `/platillos-pendientes` |
 | `history` | `/historial` |
 
-Recipe data (`generatedRecipes`, `selectedRecipe`, `currentRecipeIndex`) is lifted to App.js and passed as props — there is no Context or Redux.
+Recipe data (`generatedRecipes`, `selectedRecipe`, `currentRecipeIndex`) is lifted to App.js and passed as props — there is no Context or Redux. `selectedRecipe` is initialized from `sessionStorage` so it survives a full-page refresh on `/detalle-receta`.
 
 **Auth navigation guards**: App.js holds three refs — `registrationInProgress`, `loginInProgress`, and `isInitialLoad` — that control `onAuthStateChanged` behavior. `isInitialLoad` is `true` only for the first auth callback; on silent session restore it navigates to the view matching the current URL path (or `menu` if the URL is a public view like `/`). Subsequent login/register flows navigate via their own modal callbacks instead. Login and Register each receive two callbacks: `onLoginComplete`/`onRegistrationComplete` (sets ref to `true` before showing the success modal) and `onLoginReset`/`onRegistrationReset` (sets ref back to `false` when the modal is dismissed without navigating, e.g. via the X button). Both must be called in `closeModal` to avoid the user being stuck authenticated but on the login screen.
 
@@ -69,7 +69,7 @@ Each authenticated user also has these subcollections under `users/{userId}/`:
 ### Services
 
 - [src/services/firebase.js](src/services/firebase.js) — Initializes Firebase; exports `auth` and `db` (Firestore). All components import directly from here.
-- [src/services/openaiService.js](src/services/openaiService.js) — `generateRecipe()` builds the OpenAI prompt, enforces a `json_schema` response format (structured output), sanitizes the result (handles typographic quotes, invalid JSON chars), and applies retry logic with exponential backoff. Temperature is 0.5 for new recipes and 0.7 for regeneration. Incompatible category+ingredient combinations (e.g. Vegetariana with meat) throw an error with `isAIError: true` and `isCompatibilityError: true` — callers should surface a user-friendly message rather than retrying. `calculateDishShelfLife()` calls GPT-4o-mini to get refrigeration days for a pending dish (falls back to 3 days on error).
+- [src/services/openaiService.js](src/services/openaiService.js) — Uses `axios` for HTTP requests to the proxy. `generateRecipe()` builds the OpenAI prompt, enforces a `json_schema` response format (structured output), sanitizes the result (handles typographic quotes, invalid JSON chars), and applies retry logic with exponential backoff. Temperature is 0.5 for new recipes and 0.7 for regeneration. Incompatible category+ingredient combinations (e.g. Vegetariana with meat) throw an error with `isAIError: true` and `isCompatibilityError: true` — callers should surface a user-friendly message rather than retrying. `calculateDishShelfLife()` calls GPT-4o-mini to get refrigeration days for a pending dish (falls back to 3 days on error).
 - [src/services/foodDatabase.js](src/services/foodDatabase.js) — Hardcoded shelf-life database (~90 foods, both `completo` and `fraccionado` days). Key exports: `getFoodSuggestionsComplete(query, userId)` for autocomplete (merges global + personal DB); `calculateExpirationDateComplete(name, unit, purchaseDate, userId)` computes expiry; `addToPersonalFoodDatabase(userId, name, shelfLifeDays)` saves a new custom food; `searchFood(name)` returns the best global DB match (used internally when recalculating expiry after fractioning).
 
 ### Components
@@ -110,7 +110,7 @@ Each authenticated user also has these subcollections under `users/{userId}/`:
 
 ### Styling
 
-Tailwind CSS with a custom food theme in [tailwind.config.js](tailwind.config.js). Custom color families: `food` (orange/brown), `fresh` (green), `tomato` (red), `cream` (warm neutrals). `font-cooking` maps to Georgia serif. Custom animations: `bounce-food`, `pulse-fresh`, `wiggle`. Icons are from `lucide-react`.
+Tailwind CSS with a custom food theme in [tailwind.config.js](tailwind.config.js). Custom color families: `food` (orange/brown), `fresh` (green), `tomato` (red), `cream` (warm neutrals). `font-cooking` maps to Georgia serif. Custom animations: `bounce-food`, `pulse-fresh`, `wiggle`, `card-float`. Icons are from `lucide-react`.
 
 Component-level utility classes are defined with `@layer` in [src/index.css](src/index.css):
 

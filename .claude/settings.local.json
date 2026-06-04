@@ -17,7 +17,8 @@
       "Bash(grep -v \"//.*[a-záéíóúñ] [A-Z]\")",
       "Bash(grep \"'>\\\\\\\\|\\\\\">\")",
       "Bash(grep -v \"^\\\\s*//\")",
-      "Bash(grep -v \"^.*//.*\")"
+      "Bash(grep -v \"^.*//.*\")",
+      "Bash(npm start *)"
     ]
   }
 }

@@ -18,7 +18,7 @@ module.exports = async function handler(req, res) {
 
     const data = await response.json();
 
-    // Preservar el status HTTP real de OpenAI (429, 5xx, 400…)
+    // Preservar el status HTTP real de OpenAI
     // para que el frontend pueda aplicar su lógica de reintento.
     return res.status(response.status).json(data);
   } catch (error) {

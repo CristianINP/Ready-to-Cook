@@ -49,6 +49,7 @@ export function formatQuantity(value, decimals = 2) {
  * @param {*} value - Valor a parsear
  * @returns {{type: 'number'|'text', number?: number, text?: string}} - Resultado parseado
  */
+// ALG7 - VERIFICACIÓN DE CANTIDADES SEGURAS
 export function parseSafeQuantity(value) {
   // null o undefined
   if (value === null || value === undefined) {
@@ -205,6 +206,7 @@ export function normalizeOpenAIResponse(rawResponse) {
  * @param {Object} options - Opciones de reintento
  * @returns {Promise} - Resultado de la operación
  */
+// ALG1 - REINTENTOS INTELIGENTES
 export async function retryOperation(fn, options = {}) {
   const maxRetries = options.maxRetries || 3;
   const initialDelay = options.initialDelay || 500;
