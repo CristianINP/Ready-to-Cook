@@ -48,7 +48,7 @@ const Login = ({ setCurrentView, onLoginComplete, onLoginReset }) => {
       showModal(
         'welcome',
         'Sesión iniciada',
-        `Bienvenido, ${displayName}.`,
+        `Bienvenid@, ${displayName}.`,
         () => setCurrentView('menu')
       );
     } catch (error) {

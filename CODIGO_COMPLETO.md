@@ -1375,7 +1375,7 @@ const Login = ({ setCurrentView, onLoginComplete, onLoginReset }) => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const displayName = userCredential.user.displayName || email;
       onLoginComplete?.();
-      showModal('welcome', 'Sesión iniciada', `Bienvenido, ${displayName}.`,
+      showModal('welcome', 'Sesión iniciada', `Bienvenid@, ${displayName}.`,
         () => setCurrentView('menu'));
     } catch (error) {
       switch (error.code) {
